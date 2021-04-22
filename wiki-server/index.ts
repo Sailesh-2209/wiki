@@ -7,7 +7,7 @@ import { User } from "./models/User";
 import { register } from "./handlers/register";
 import { login } from "./handlers/login";
 import { auth } from "./utils/auth";
-import { createProgram } from "./handlers/program";
+import { createProgram, getPrograms } from "./handlers/program";
 
 dotenv.config();
 
@@ -95,13 +95,21 @@ mongoose
       });
     });
 
-    app.get("/programs", (req, res) => {
+    app.get("/programs", async (req, res) => {
       if (!auth(req)) {
         res.send({
-          field: "authorization",
-          message: "You are not authorized to perform this operation",
+          programs: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
         });
       }
+      const { programs, error } = await getPrograms();
+      res.send({
+        programs,
+        error,
+      });
     });
 
     app.listen(PORT, () => {

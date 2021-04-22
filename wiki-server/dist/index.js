@@ -96,14 +96,22 @@ mongoose_1.default
             error,
         });
     }));
-    app.get("/programs", (req, res) => {
+    app.get("/programs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
             res.send({
-                field: "authorization",
-                message: "You are not authorized to perform this operation",
+                programs: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
             });
         }
-    });
+        const { programs, error } = yield program_1.getPrograms();
+        res.send({
+            programs,
+            error,
+        });
+    }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });

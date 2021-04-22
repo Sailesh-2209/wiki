@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProgram = void 0;
+exports.getPrograms = exports.createProgram = void 0;
 const Program_1 = require("../models/Program");
 const createProgram = ({ name, description, startedIn, endedIn, image, }) => __awaiter(void 0, void 0, void 0, function* () {
     if (!name || !description || !startedIn || !endedIn || !image) {
@@ -54,3 +54,24 @@ const createProgram = ({ name, description, startedIn, endedIn, image, }) => __a
     };
 });
 exports.createProgram = createProgram;
+const getPrograms = () => __awaiter(void 0, void 0, void 0, function* () {
+    let programs;
+    let error;
+    let document = yield Program_1.Program.find({});
+    if (document) {
+        return {
+            programs: document,
+            error: null,
+        };
+    }
+    else {
+        return {
+            programs: null,
+            error: {
+                field: "database",
+                message: "Could not find program data. Try again later",
+            },
+        };
+    }
+});
+exports.getPrograms = getPrograms;
