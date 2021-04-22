@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 import { register } from "./handlers/register";
 
 dotenv.config();
@@ -14,6 +15,8 @@ const app = express();
 mongoose
   .connect(MONGOURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
+    app.use(bodyParser.json());
+
     app.use(
       cors({
         origin: "http://localhost:3000",

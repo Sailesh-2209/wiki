@@ -58,7 +58,7 @@ export const register: (
     };
   }
 
-  if (/[a-zA-Z0-9]/.test(password)) {
+  if (!/[a-zA-Z0-9]/.test(password)) {
     let newError = {
       field: "password",
       message:
