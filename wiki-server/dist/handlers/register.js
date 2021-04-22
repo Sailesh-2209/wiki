@@ -27,6 +27,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         return {
             user: null,
             error: newError,
+            token: null,
         };
     }
     if (password.trim() === "") {
@@ -37,6 +38,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         return {
             user: null,
             error: newError,
+            token: null,
         };
     }
     if (username.length < 3) {
@@ -47,6 +49,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         return {
             user: null,
             error: newError,
+            token: null,
         };
     }
     if (password.length < 6) {
@@ -57,6 +60,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         return {
             user: null,
             error: newError,
+            token: null,
         };
     }
     if (!/[a-zA-Z0-9]/.test(password)) {
@@ -67,6 +71,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         return {
             user: null,
             error: newError,
+            token: null,
         };
     }
     const user = yield User_1.User.findOne({ username });
@@ -77,6 +82,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
                 field: "username",
                 message: "User already exists",
             },
+            token: null,
         };
     }
     const hash = yield bcrypt_1.default.hash(password, 12);
@@ -85,12 +91,13 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
         password: hash,
         createdAt: new Date(),
     });
-    jsonwebtoken_1.default.sign({
+    const token = jsonwebtoken_1.default.sign({
         uid: newUser._id,
     }, process.env.SECRET, { expiresIn: "2h" });
     return {
         user: newUser,
         error: null,
+        token,
     };
 });
 exports.register = register;

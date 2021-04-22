@@ -25,6 +25,7 @@ const login = (username, password) => __awaiter(void 0, void 0, void 0, function
                 field: "username",
                 message: "User not found",
             },
+            token: null,
         };
     }
     const match = yield bcrypt_1.default.compare(password, user.password);
@@ -35,12 +36,16 @@ const login = (username, password) => __awaiter(void 0, void 0, void 0, function
                 field: "password",
                 message: "Incorrect Password",
             },
+            token: null,
         };
     }
-    jsonwebtoken_1.default.sign({ uid: user.id }, process.env.SECRET, { expiresIn: "1h" });
+    const token = jsonwebtoken_1.default.sign({ uid: user.id }, process.env.SECRET, {
+        expiresIn: "1h",
+    });
     return {
         user,
         error: null,
+        token,
     };
 });
 exports.login = login;

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 interface LoginReturn {
   user: object | null;
   error: { field: string; message: string } | null;
+  token: string | null;
 }
 
 export const login: (
@@ -19,6 +20,7 @@ export const login: (
         field: "username",
         message: "User not found",
       },
+      token: null,
     };
   }
   const match = await bcrypt.compare(password, user.password);
@@ -29,12 +31,16 @@ export const login: (
         field: "password",
         message: "Incorrect Password",
       },
+      token: null,
     };
   }
 
-  jwt.sign({ uid: user.id }, process.env.SECRET!, { expiresIn: "1h" });
+  const token = jwt.sign({ uid: user.id }, process.env.SECRET!, {
+    expiresIn: "1h",
+  });
   return {
     user,
     error: null,
+    token,
   };
 };

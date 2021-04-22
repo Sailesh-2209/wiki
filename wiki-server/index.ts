@@ -28,20 +28,22 @@ mongoose
     app.post("/register", async (req, res) => {
       const username = req.body.username;
       const password = req.body.password;
-      const { user, error } = await register(username, password);
+      const { user, error, token } = await register(username, password);
       res.send({
         user,
         error,
+        token,
       });
     });
 
-    app.post("/login", async (req, res, next) => {
+    app.post("/login", async (req, res) => {
       const username = req.body.username;
       const password = req.body.password;
-      const { user, error } = await login(username, password);
+      const { user, error, token } = await login(username, password);
       res.send({
         user,
         error,
+        token,
       });
     });
 

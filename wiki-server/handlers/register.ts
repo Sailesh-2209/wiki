@@ -8,6 +8,7 @@ dotenv.config();
 interface RegisterReturn {
   user: object | null;
   error: { field: string; message: string } | null;
+  token: string | null;
 }
 
 export const register: (
@@ -22,6 +23,7 @@ export const register: (
     return {
       user: null,
       error: newError,
+      token: null,
     };
   }
 
@@ -33,6 +35,7 @@ export const register: (
     return {
       user: null,
       error: newError,
+      token: null,
     };
   }
 
@@ -44,6 +47,7 @@ export const register: (
     return {
       user: null,
       error: newError,
+      token: null,
     };
   }
 
@@ -55,6 +59,7 @@ export const register: (
     return {
       user: null,
       error: newError,
+      token: null,
     };
   }
 
@@ -67,6 +72,7 @@ export const register: (
     return {
       user: null,
       error: newError,
+      token: null,
     };
   }
 
@@ -78,6 +84,7 @@ export const register: (
         field: "username",
         message: "User already exists",
       },
+      token: null,
     };
   }
 
@@ -87,7 +94,7 @@ export const register: (
     password: hash,
     createdAt: new Date(),
   });
-  jwt.sign(
+  const token = jwt.sign(
     {
       uid: newUser._id,
     },
@@ -98,5 +105,6 @@ export const register: (
   return {
     user: newUser,
     error: null,
+    token,
   };
 };

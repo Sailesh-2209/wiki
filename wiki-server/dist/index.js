@@ -34,19 +34,21 @@ mongoose_1.default
     app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
-        const { user, error } = yield register_1.register(username, password);
+        const { user, error, token } = yield register_1.register(username, password);
         res.send({
             user,
             error,
+            token,
         });
     }));
-    app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
-        const { user, error } = yield login_1.login(username, password);
+        const { user, error, token } = yield login_1.login(username, password);
         res.send({
             user,
             error,
+            token,
         });
     }));
     app.listen(PORT, () => {
