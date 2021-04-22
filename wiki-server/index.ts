@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import { User } from "./models/User";
 import { register } from "./handlers/register";
 import { login } from "./handlers/login";
+import { auth } from "./utils/auth";
 
 dotenv.config();
 
@@ -45,6 +47,42 @@ mongoose
         error,
         token,
       });
+    });
+
+    app.get("/users", async (req, res, next) => {
+      const users = await User.find({});
+      const bearerToken: string = req.headers.authorization!;
+
+      if (bearerToken) {
+        const token = bearerToken.split(" ")[1];
+        if (auth(token)) {
+          res.send({
+            users: null,
+            error: {
+              field: "authorization",
+              message: "You are not authorized to perform this operation",
+            },
+          });
+        }
+      } else {
+        res.send({
+          users: null,
+          error: {
+            field: "authorization",
+            message: "Authorization token must be provided",
+          },
+        });
+      }
+
+      if (users) {
+        res.send({
+          users,
+          error: null,
+        });
+      } else {
+        res.statusCode = 404;
+        next();
+      }
     });
 
     app.listen(PORT, () => {

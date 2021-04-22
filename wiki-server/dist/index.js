@@ -17,8 +17,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const User_1 = require("./models/User");
 const register_1 = require("./handlers/register");
 const login_1 = require("./handlers/login");
+const auth_1 = require("./utils/auth");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 5000;
 const MONGOURL = process.env.MONGOURL;
@@ -50,6 +52,41 @@ mongoose_1.default
             error,
             token,
         });
+    }));
+    app.get("/users", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const users = yield User_1.User.find({});
+        const bearerToken = req.headers.authorization;
+        if (bearerToken) {
+            const token = bearerToken.split(" ")[1];
+            if (auth_1.auth(token)) {
+                res.send({
+                    users: null,
+                    error: {
+                        field: "authorization",
+                        message: "You are not authorized to perform this operation",
+                    },
+                });
+            }
+        }
+        else {
+            res.send({
+                users: null,
+                error: {
+                    field: "authorization",
+                    message: "Authorization token must be provided",
+                },
+            });
+        }
+        if (users) {
+            res.send({
+                users,
+                error: null,
+            });
+        }
+        else {
+            res.statusCode = 404;
+            next();
+        }
     }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
