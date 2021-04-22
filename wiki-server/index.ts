@@ -7,6 +7,7 @@ import { User } from "./models/User";
 import { register } from "./handlers/register";
 import { login } from "./handlers/login";
 import { auth } from "./utils/auth";
+import { createProgram } from "./handlers/program";
 
 dotenv.config();
 
@@ -50,30 +51,17 @@ mongoose
     });
 
     app.get("/users", async (req, res, next) => {
-      const users = await User.find({});
-      const bearerToken: string = req.headers.authorization!;
-
-      if (bearerToken) {
-        const token = bearerToken.split(" ")[1];
-        if (auth(token)) {
-          res.send({
-            users: null,
-            error: {
-              field: "authorization",
-              message: "You are not authorized to perform this operation",
-            },
-          });
-        }
-      } else {
+      if (!auth(req)) {
         res.send({
           users: null,
           error: {
             field: "authorization",
-            message: "Authorization token must be provided",
+            message: "You are not authorized to perform this operation",
           },
         });
       }
 
+      const users = await User.find({});
       if (users) {
         res.send({
           users,
@@ -82,6 +70,37 @@ mongoose
       } else {
         res.statusCode = 404;
         next();
+      }
+    });
+
+    app.post("/programs", async (req, res) => {
+      if (!auth(req)) {
+        res.send({
+          field: "authorization",
+          message: "You are not authorized to perform this operation",
+        });
+      }
+
+      const { name, description, startedIn, endedIn, image } = req.body;
+      const { program, error } = await createProgram({
+        name,
+        description,
+        startedIn,
+        endedIn,
+        image,
+      });
+      res.send({
+        program,
+        error,
+      });
+    });
+
+    app.get("/programs", (req, res, next) => {
+      if (!auth(req)) {
+        res.send({
+          field: "authorization",
+          message: "You are not authorized to perform this operation",
+        });
       }
     });
 

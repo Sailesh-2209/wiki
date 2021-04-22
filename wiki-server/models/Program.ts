@@ -1,5 +1,4 @@
 import { model, Model, Document, Schema } from "mongoose";
-import { characterSchema } from "./Character";
 
 interface IProgram extends Document {
   name: string;
@@ -7,7 +6,6 @@ interface IProgram extends Document {
   startedIn: string;
   endedIn: string;
   image: string;
-  characters: typeof characterSchema[];
 }
 
 const programSchema = new Schema({
@@ -36,7 +34,6 @@ const programSchema = new Schema({
     required: true,
     unique: true,
   },
-  character: [characterSchema],
 });
 
 export const Program: Model<IProgram> = model("Program", programSchema);

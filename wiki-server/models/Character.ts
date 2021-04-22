@@ -1,6 +1,17 @@
-import { Schema } from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
 
-export const characterSchema = new Schema({
+interface IChar extends Document {
+  show: string;
+  name: string;
+  image: string;
+  actor: string;
+}
+
+const characterSchema = new Schema({
+  show: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -16,3 +27,5 @@ export const characterSchema = new Schema({
     required: true,
   },
 });
+
+export const Character: Model<IChar> = model("Character", characterSchema);

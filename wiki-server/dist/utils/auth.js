@@ -7,15 +7,19 @@ exports.auth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const auth = (token) => {
-    jsonwebtoken_1.default.verify(token, process.env.SECRET, (err) => {
-        if (err) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    });
+const auth = (req) => {
+    const bearerToken = req.headers.authorization;
+    if (bearerToken) {
+        const token = bearerToken.split(" ")[1];
+        jsonwebtoken_1.default.verify(token, process.env.SECRET, (err) => {
+            if (err) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+    }
     return false;
 };
 exports.auth = auth;

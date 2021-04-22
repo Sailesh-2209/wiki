@@ -1,8 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.characterSchema = void 0;
+exports.Character = void 0;
 const mongoose_1 = require("mongoose");
-exports.characterSchema = new mongoose_1.Schema({
+const characterSchema = new mongoose_1.Schema({
+    show: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
@@ -18,3 +22,4 @@ exports.characterSchema = new mongoose_1.Schema({
         required: true,
     },
 });
+exports.Character = mongoose_1.model("Character", characterSchema);
