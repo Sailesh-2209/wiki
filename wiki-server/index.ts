@@ -95,7 +95,7 @@ mongoose
       });
     });
 
-    app.get("/programs", (req, res, next) => {
+    app.get("/programs", (req, res) => {
       if (!auth(req)) {
         res.send({
           field: "authorization",

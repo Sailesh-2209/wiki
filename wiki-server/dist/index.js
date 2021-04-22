@@ -96,7 +96,7 @@ mongoose_1.default
             error,
         });
     }));
-    app.get("/programs", (req, res, next) => {
+    app.get("/programs", (req, res) => {
         if (!auth_1.auth(req)) {
             res.send({
                 field: "authorization",

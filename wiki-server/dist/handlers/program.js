@@ -21,6 +21,16 @@ const createProgram = ({ name, description, startedIn, endedIn, image, }) => __a
             },
         };
     }
+    const searchProgram = Program_1.Program.findOne({ name });
+    if (searchProgram) {
+        return {
+            program: null,
+            error: {
+                field: "database",
+                message: "Program already exists",
+            },
+        };
+    }
     const newProgram = new Program_1.Program({
         name,
         description,

@@ -31,6 +31,17 @@ export const createProgram: (
     };
   }
 
+  const searchProgram = Program.findOne({ name });
+  if (searchProgram) {
+    return {
+      program: null,
+      error: {
+        field: "database",
+        message: "Program already exists",
+      },
+    };
+  }
+
   const newProgram = new Program({
     name,
     description,
