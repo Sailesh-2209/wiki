@@ -5,16 +5,22 @@ dotenv.config();
 
 export const auth: (req: Request) => boolean = (req) => {
   const bearerToken = req.headers.authorization;
-
+  let error;
   if (bearerToken) {
     const token = bearerToken.split(" ")[1];
     jwt.verify(token, process.env.SECRET!, (err) => {
       if (err) {
-        return false;
+        console.error(err);
+        error = err;
       } else {
-        return true;
+        error = null;
       }
     });
+  } else {
+    error = "no bearer token";
   }
-  return false;
+  if (error !== null) {
+    return false;
+  }
+  return true;
 };

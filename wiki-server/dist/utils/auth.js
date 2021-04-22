@@ -9,17 +9,25 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const auth = (req) => {
     const bearerToken = req.headers.authorization;
+    let error;
     if (bearerToken) {
         const token = bearerToken.split(" ")[1];
         jsonwebtoken_1.default.verify(token, process.env.SECRET, (err) => {
             if (err) {
-                return false;
+                console.error(err);
+                error = err;
             }
             else {
-                return true;
+                error = null;
             }
         });
     }
-    return false;
+    else {
+        error = "no bearer token";
+    }
+    if (error !== null) {
+        return false;
+    }
+    return true;
 };
 exports.auth = auth;
