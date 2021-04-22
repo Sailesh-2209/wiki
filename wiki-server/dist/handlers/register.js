@@ -75,7 +75,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
             user: null,
             error: {
                 field: "username",
-                error: "User already exists",
+                message: "User already exists",
             },
         };
     }

@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const register_1 = require("./handlers/register");
+const login_1 = require("./handlers/login");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 5000;
 const MONGOURL = process.env.MONGOURL;
@@ -30,10 +31,19 @@ mongoose_1.default
         origin: "http://localhost:3000",
         credentials: true,
     }));
-    app.post("/register", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
         const { user, error } = yield register_1.register(username, password);
+        res.send({
+            user,
+            error,
+        });
+    }));
+    app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const username = req.body.username;
+        const password = req.body.password;
+        const { user, error } = yield login_1.login(username, password);
         res.send({
             user,
             error,

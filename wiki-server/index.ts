@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { register } from "./handlers/register";
+import { login } from "./handlers/login";
 
 dotenv.config();
 
@@ -24,10 +25,20 @@ mongoose
       })
     );
 
-    app.post("/register", async (req, res, next) => {
+    app.post("/register", async (req, res) => {
       const username = req.body.username;
       const password = req.body.password;
       const { user, error } = await register(username, password);
+      res.send({
+        user,
+        error,
+      });
+    });
+
+    app.post("/login", async (req, res, next) => {
+      const username = req.body.username;
+      const password = req.body.password;
+      const { user, error } = await login(username, password);
       res.send({
         user,
         error,

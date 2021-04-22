@@ -7,7 +7,7 @@ dotenv.config();
 
 interface RegisterReturn {
   user: object | null;
-  error: object | null;
+  error: { field: string; message: string } | null;
 }
 
 export const register: (
@@ -76,7 +76,7 @@ export const register: (
       user: null,
       error: {
         field: "username",
-        error: "User already exists",
+        message: "User already exists",
       },
     };
   }
