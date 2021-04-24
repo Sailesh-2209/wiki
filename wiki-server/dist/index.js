@@ -22,6 +22,7 @@ const register_1 = require("./handlers/register");
 const login_1 = require("./handlers/login");
 const auth_1 = require("./utils/auth");
 const program_1 = require("./handlers/program");
+const character_1 = require("./handlers/character");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 5000;
 const MONGOURL = process.env.MONGOURL;
@@ -63,6 +64,7 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
+            next();
         }
         const users = yield User_1.User.find({});
         if (users) {
@@ -76,12 +78,13 @@ mongoose_1.default
             next();
         }
     }));
-    app.post("/programs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
             res.send({
                 field: "authorization",
                 message: "You are not authorized to perform this operation",
             });
+            next();
         }
         const { name, description, startedIn, endedIn, image } = req.body;
         const { program, error } = yield program_1.createProgram({
@@ -95,8 +98,9 @@ mongoose_1.default
             program,
             error,
         });
+        next();
     }));
-    app.get("/programs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/programs/:pid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
             res.send({
                 programs: null,
@@ -105,12 +109,51 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
+            next();
+        }
+        const pid = req.params.pid;
+        const { character, error } = yield character_1.createCharacter(pid, req);
+        res.send({
+            character,
+            error,
+        });
+        next();
+    }));
+    app.get("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!auth_1.auth(req)) {
+            res.send({
+                programs: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
+            });
+            next();
         }
         const { programs, error } = yield program_1.getPrograms();
         res.send({
             programs,
             error,
         });
+        next();
+    }));
+    app.get("/programs/:pid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!auth_1.auth(req)) {
+            res.send({
+                programs: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
+            });
+            next();
+        }
+        const { characters, error } = yield character_1.getCharacters();
+        res.send({
+            characters,
+            error,
+        });
+        next();
     }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);

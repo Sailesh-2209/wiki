@@ -73,9 +73,6 @@ export const createProgram: (
 };
 
 export const getPrograms: () => Promise<getProgramsReturnInterface> = async () => {
-  let programs;
-  let error;
-
   let document = await Program.find({});
   if (document) {
     return {

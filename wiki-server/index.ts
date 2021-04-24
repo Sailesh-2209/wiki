@@ -8,6 +8,7 @@ import { register } from "./handlers/register";
 import { login } from "./handlers/login";
 import { auth } from "./utils/auth";
 import { createProgram, getPrograms } from "./handlers/program";
+import { createCharacter, getCharacters } from "./handlers/character";
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
+        next();
       }
 
       const users = await User.find({});
@@ -73,12 +75,13 @@ mongoose
       }
     });
 
-    app.post("/programs", async (req, res) => {
+    app.post("/programs", async (req, res, next) => {
       if (!auth(req)) {
         res.send({
           field: "authorization",
           message: "You are not authorized to perform this operation",
         });
+        next();
       }
 
       const { name, description, startedIn, endedIn, image } = req.body;
@@ -93,9 +96,10 @@ mongoose
         program,
         error,
       });
+      next();
     });
 
-    app.get("/programs", async (req, res) => {
+    app.post("/programs/:pid", async (req, res, next) => {
       if (!auth(req)) {
         res.send({
           programs: null,
@@ -104,12 +108,53 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
+        next();
+      }
+      const pid = req.params.pid;
+      const { character, error } = await createCharacter(pid, req);
+      res.send({
+        character,
+        error,
+      });
+      next();
+    });
+
+    app.get("/programs", async (req, res, next) => {
+      if (!auth(req)) {
+        res.send({
+          programs: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        next();
       }
       const { programs, error } = await getPrograms();
       res.send({
         programs,
         error,
       });
+      next();
+    });
+
+    app.get("/programs/:pid", async (req, res, next) => {
+      if (!auth(req)) {
+        res.send({
+          programs: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        next();
+      }
+      const { characters, error } = await getCharacters();
+      res.send({
+        characters,
+        error,
+      });
+      next();
     });
 
     app.listen(PORT, () => {

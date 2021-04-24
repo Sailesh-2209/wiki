@@ -1,6 +1,7 @@
-import { model, Model, Document, Schema } from "mongoose";
+import mongoose, { model, Model, Document, Schema } from "mongoose";
 
 export interface IProgram extends Document {
+  createdBy: string;
   name: string;
   description: string;
   startedIn: string;
@@ -9,6 +10,10 @@ export interface IProgram extends Document {
 }
 
 const programSchema = new Schema({
+  createdBy: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,

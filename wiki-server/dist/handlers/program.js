@@ -55,8 +55,6 @@ const createProgram = ({ name, description, startedIn, endedIn, image, }) => __a
 });
 exports.createProgram = createProgram;
 const getPrograms = () => __awaiter(void 0, void 0, void 0, function* () {
-    let programs;
-    let error;
     let document = yield Program_1.Program.find({});
     if (document) {
         return {
