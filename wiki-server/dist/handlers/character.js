@@ -59,8 +59,8 @@ const createCharacter = (pid, req) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.createCharacter = createCharacter;
-const getCharacters = () => __awaiter(void 0, void 0, void 0, function* () {
-    let document = yield Character_1.Character.find({});
+const getCharacters = (pid) => __awaiter(void 0, void 0, void 0, function* () {
+    let document = yield Character_1.Character.find({ show: pid });
     if (document) {
         return {
             characters: document,

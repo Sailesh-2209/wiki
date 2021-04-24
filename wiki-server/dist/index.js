@@ -35,7 +35,7 @@ mongoose_1.default
         origin: "http://localhost:3000",
         credentials: true,
     }));
-    app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/register", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
         const { user, error, token } = yield register_1.register(username, password);
@@ -44,8 +44,9 @@ mongoose_1.default
             error,
             token,
         });
+        return next();
     }));
-    app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
         const { user, error, token } = yield login_1.login(username, password);
@@ -54,6 +55,7 @@ mongoose_1.default
             error,
             token,
         });
+        return next();
     }));
     app.get("/users", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
@@ -64,7 +66,7 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
-            next();
+            return next();
         }
         const users = yield User_1.User.find({});
         if (users) {
@@ -75,7 +77,7 @@ mongoose_1.default
         }
         else {
             res.statusCode = 404;
-            next();
+            return next();
         }
     }));
     app.post("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,7 +86,7 @@ mongoose_1.default
                 field: "authorization",
                 message: "You are not authorized to perform this operation",
             });
-            next();
+            return next();
         }
         const { name, description, startedIn, endedIn, image } = req.body;
         const { program, error } = yield program_1.createProgram({
@@ -98,7 +100,7 @@ mongoose_1.default
             program,
             error,
         });
-        next();
+        return next();
     }));
     app.post("/programs/:pid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
@@ -109,7 +111,7 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
-            next();
+            return next();
         }
         const pid = req.params.pid;
         const { character, error } = yield character_1.createCharacter(pid, req);
@@ -117,7 +119,7 @@ mongoose_1.default
             character,
             error,
         });
-        next();
+        return next();
     }));
     app.get("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
@@ -128,14 +130,14 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
-            next();
+            return next();
         }
         const { programs, error } = yield program_1.getPrograms();
         res.send({
             programs,
             error,
         });
-        next();
+        return next();
     }));
     app.get("/programs/:pid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
@@ -146,14 +148,14 @@ mongoose_1.default
                     message: "You are not authorized to perform this operation",
                 },
             });
-            next();
+            return next();
         }
-        const { characters, error } = yield character_1.getCharacters();
+        const { characters, error } = yield character_1.getCharacters(req.params.pid);
         res.send({
             characters,
             error,
         });
-        next();
+        return next();
     }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);

@@ -60,11 +60,13 @@ export const createCharacter: (
   }
 };
 
-export const getCharacters: () => Promise<{
+export const getCharacters: (
+  pid: string
+) => Promise<{
   characters: IChar[] | null;
   error: { field: string; message: string } | null;
-}> = async () => {
-  let document = await Character.find({});
+}> = async (pid) => {
+  let document = await Character.find({ show: pid });
   if (document) {
     return {
       characters: document,

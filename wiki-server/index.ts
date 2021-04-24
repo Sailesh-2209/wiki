@@ -29,7 +29,7 @@ mongoose
       })
     );
 
-    app.post("/register", async (req, res) => {
+    app.post("/register", async (req, res, next) => {
       const username = req.body.username;
       const password = req.body.password;
       const { user, error, token } = await register(username, password);
@@ -38,9 +38,10 @@ mongoose
         error,
         token,
       });
+      return next();
     });
 
-    app.post("/login", async (req, res) => {
+    app.post("/login", async (req, res, next) => {
       const username = req.body.username;
       const password = req.body.password;
       const { user, error, token } = await login(username, password);
@@ -49,6 +50,7 @@ mongoose
         error,
         token,
       });
+      return next();
     });
 
     app.get("/users", async (req, res, next) => {
@@ -60,7 +62,7 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
-        next();
+        return next();
       }
 
       const users = await User.find({});
@@ -71,7 +73,7 @@ mongoose
         });
       } else {
         res.statusCode = 404;
-        next();
+        return next();
       }
     });
 
@@ -81,7 +83,7 @@ mongoose
           field: "authorization",
           message: "You are not authorized to perform this operation",
         });
-        next();
+        return next();
       }
 
       const { name, description, startedIn, endedIn, image } = req.body;
@@ -96,7 +98,7 @@ mongoose
         program,
         error,
       });
-      next();
+      return next();
     });
 
     app.post("/programs/:pid", async (req, res, next) => {
@@ -108,7 +110,7 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
-        next();
+        return next();
       }
       const pid = req.params.pid;
       const { character, error } = await createCharacter(pid, req);
@@ -116,7 +118,7 @@ mongoose
         character,
         error,
       });
-      next();
+      return next();
     });
 
     app.get("/programs", async (req, res, next) => {
@@ -128,14 +130,14 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
-        next();
+        return next();
       }
       const { programs, error } = await getPrograms();
       res.send({
         programs,
         error,
       });
-      next();
+      return next();
     });
 
     app.get("/programs/:pid", async (req, res, next) => {
@@ -147,14 +149,14 @@ mongoose
             message: "You are not authorized to perform this operation",
           },
         });
-        next();
+        return next();
       }
-      const { characters, error } = await getCharacters();
+      const { characters, error } = await getCharacters(req.params.pid);
       res.send({
         characters,
         error,
       });
-      next();
+      return next();
     });
 
     app.listen(PORT, () => {
