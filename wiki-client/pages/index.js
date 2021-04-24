@@ -1,65 +1,64 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useState } from "react";
+import axios from "axios";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { baseURL } from "../constants/baseURL";
 
-export default function Home() {
+const fetchData = async () => {
+  let response;
+  await axios
+    .get(`${baseURL}/programs`)
+    .then((value) => {
+      response = value.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return response;
+};
+
+export const getServerSideProps = async () => {
+  const response = await fetchData();
+  return { props: { response } };
+};
+
+export default function Home(props) {
+  const [programs, setPrograms] = useState(props.response.programs);
+  console.log(props.response);
   return (
-    <div className={styles.container}>
+    <>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Wiki | Fandom</title>
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      <div className={styles.container}>
+        <div className={styles.navbar}>
+          <div className={styles.navbarContent}>
+            <p>Home</p>
+            <div className={styles.registerContainer}>
+              <p>Login</p>
+              <p>Signup</p>
+            </div>
+          </div>
+          <div className={styles.underline}></div>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+        <div className={styles.programsContainer}>
+          {programs.map((program) => (
+            <div key={program._id} className={styles.cardContainer}>
+              <img
+                src={program.image}
+                alt={program.name}
+                className={styles.cardImage}
+              />
+              <h3 className={styles.cardTitle}>{program.name}</h3>
+              <p className={styles.dates}>
+                {program.startedIn} - {program.endedIn}
+              </p>
+              <p className={styles.cardDescription}>{program.description}</p>
+            </div>
+          ))}
+          <img className={styles.addIcon} src="/add.svg" alt="add" />
+        </div>
+      </div>
+    </>
+  );
 }
