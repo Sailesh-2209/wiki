@@ -77,6 +77,16 @@ mongoose
       }
     });
 
+    app.delete("/users/:uid", async (req, _, next) => {
+      const uid = req.params.uid;
+      User.findByIdAndDelete({ id: uid })
+        .then((value) => {
+          console.log(value);
+        })
+        .catch((error) => console.error(error));
+      return next();
+    });
+
     app.post("/programs", async (req, res, next) => {
       if (!auth(req)) {
         res.send({

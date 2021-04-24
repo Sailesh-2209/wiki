@@ -80,6 +80,15 @@ mongoose_1.default
             return next();
         }
     }));
+    app.delete("/users/:uid", (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const uid = req.params.uid;
+        User_1.User.findByIdAndDelete({ id: uid })
+            .then((value) => {
+            console.log(value);
+        })
+            .catch((error) => console.error(error));
+        return next();
+    }));
     app.post("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
             res.send({
