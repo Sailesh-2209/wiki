@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 import styles from "../styles/Login.module.css";
 import Link from "next/link";
+import { AuthContext } from "../constants/authContext";
 
 export default function Login() {
+  const auth = useContext(AuthContext);
+  const { user, error, token, login } = auth;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit");
+    login(username, password);
   };
+
+  useEffect(() => {
+    if (user != null && token != null && error == null) {
+      router.push("/");
+    }
+  }, [user, error, token]);
 
   return (
     <div className={styles.container}>
@@ -30,11 +41,15 @@ export default function Login() {
       <div className={styles.loginContainer}>
         <div className={styles.loginForm}>
           <form onSubmit={(e) => handleSubmit(e)} className={styles.form}>
-            <label className={styles.formLabel} for="username">
+            <label className={styles.formLabel} htmlFor="username">
               Username
             </label>
             <input
-              className={styles.formInput}
+              className={
+                error && error.field === "username"
+                  ? styles.formError
+                  : styles.formInput
+              }
               type="text"
               id="username"
               name="username"
@@ -42,11 +57,15 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <label className={styles.formLabel} for="password">
+            <label className={styles.formLabel} htmlFor="password">
               Password
             </label>
             <input
-              className={styles.formInput}
+              className={
+                error && error.field === "password"
+                  ? styles.formError
+                  : styles.formInput
+              }
               type="password"
               id="password"
               name="password"
@@ -54,7 +73,9 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className={styles.errorContainer}></div>
+            <div className={styles.errorContainer}>
+              {error === null ? null : error.message}
+            </div>
             <button className={styles.formButton} type="submit">
               Submit
             </button>

@@ -91,10 +91,27 @@
   border-radius: 8px;
   transition: 0.5s ease;
 }
+.formError {
+  background-color: #ff8097;
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  height: 40px;
+  width: 400px;
+  margin-bottom: 20px;
+  padding-left: 15px;
+  border-radius: 8px;
+}
 .formInput:focus {
   background-color: #bbbbbb;
 }
 .errorContainer {
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgb(49, 62, 255);
   height: 35px;
   margin: auto;
 }

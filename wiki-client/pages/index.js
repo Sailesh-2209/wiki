@@ -48,6 +48,7 @@ export default function Home(props) {
             </div>
           </div>
           <div className={styles.underline}></div>
+          <div className="underline"></div>
         </div>
         <div className={styles.programsContainer}>
           {programs.map((program) => (

@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 import styles from "../styles/Login.module.css";
 import Link from "next/link";
+import { AuthContext } from "../constants/authContext";
 
 export default function Login() {
+  const auth = useContext(AuthContext);
+  const { user, error, token, signup } = auth;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit");
+    signup(username, password);
   };
+
+  useEffect(() => {
+    if (user != null && token && error == null) {
+      router.push("/");
+    }
+  }, [user, error, token]);
 
   return (
     <div className={styles.container}>

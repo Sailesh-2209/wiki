@@ -1,9 +1,14 @@
 import { createContext, useState } from "react";
+import axios from "axios";
+import { baseURL } from "../constants/baseURL";
 
 export const AuthContext = createContext({
   user: null,
   error: null,
   token: null,
+  // setUser: () => {},
+  // setError: () => {},
+  // setToken: () => {},
   login: () => {},
   signup: () => {},
   logout: () => {},
@@ -14,18 +19,38 @@ export const AuthContextProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
 
-  const login = () => {
-    console.log("login");
-    setUser("sailesh");
-    setError(null);
-    setToken("abcd");
+  const login = async (username, password) => {
+    axios
+      .post(`${baseURL}/login`, {
+        username,
+        password,
+      })
+      .then((value) => {
+        let { user, error, token } = value.data;
+        setUser(user);
+        setError(error);
+        setToken(token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const signup = () => {
-    console.log("signup");
-    setUser("sailesh");
-    setError(null);
-    setToken("abcd");
+    axios
+      .post(`${baseURL}/register`, {
+        username,
+        password,
+      })
+      .then((value) => {
+        let { user, error, token } = value.data;
+        setUser(user);
+        setError(error);
+        setToken(token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const logout = () => {
@@ -38,9 +63,12 @@ export const AuthContextProvider = ({ children }) => {
         user,
         error,
         token,
-        login: () => login(),
-        signup: () => signup(),
-        logout: () => logout,
+        // setUser: () => setUser(),
+        // setError: () => setError(),
+        // setToken: () => setToken(),
+        login: (username, password) => login(username, password),
+        signup: (username, password) => signup(username, password),
+        logout: () => logout(),
       }}
     >
       {children}
