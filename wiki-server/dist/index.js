@@ -57,6 +57,13 @@ mongoose_1.default
         });
         return next();
     }));
+    app.post("/checkauth", (req, res, next) => {
+        const authorized = auth_1.auth(req);
+        res.send({
+            authorized,
+        });
+        return next();
+    });
     app.get("/users", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!auth_1.auth(req)) {
             res.send({
@@ -97,7 +104,7 @@ mongoose_1.default
             });
             return next();
         }
-        const { createdBy, name, description, startedIn, endedIn, image, } = req.body;
+        const { createdBy, name, description, startedIn, endedIn, image } = req.body;
         const { program, error } = yield program_1.createProgram({
             createdBy,
             name,

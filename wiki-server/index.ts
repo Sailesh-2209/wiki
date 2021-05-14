@@ -53,6 +53,14 @@ mongoose
       return next();
     });
 
+    app.post("/checkauth", (req, res, next) => {
+      const authorized = auth(req);
+      res.send({
+        authorized,
+      });
+      return next();
+    });
+
     app.get("/users", async (req, res, next) => {
       if (!auth(req)) {
         res.send({
@@ -96,14 +104,8 @@ mongoose
         return next();
       }
 
-      const {
-        createdBy,
-        name,
-        description,
-        startedIn,
-        endedIn,
-        image,
-      } = req.body;
+      const { createdBy, name, description, startedIn, endedIn, image } =
+        req.body;
       const { program, error } = await createProgram({
         createdBy,
         name,
