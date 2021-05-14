@@ -63,8 +63,8 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
             token: null,
         };
     }
-    if (!/[a-z]/.test(password) &&
-        !/[A-Z]/.test(password) &&
+    if (!/[a-z]/.test(password) ||
+        !/[A-Z]/.test(password) ||
         !/[0-9]/.test(password)) {
         let newError = {
             field: "password",

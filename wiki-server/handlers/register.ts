@@ -64,8 +64,8 @@ export const register: (
   }
 
   if (
-    !/[a-z]/.test(password) &&
-    !/[A-Z]/.test(password) &&
+    !/[a-z]/.test(password) ||
+    !/[A-Z]/.test(password) ||
     !/[0-9]/.test(password)
   ) {
     let newError = {
