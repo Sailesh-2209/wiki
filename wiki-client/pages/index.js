@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import { baseURL } from "../constants/baseURL";
+import { AuthContext } from "../constants/authContext";
 
 const fetchData = async () => {
   let response;
@@ -25,7 +26,9 @@ export const getServerSideProps = async () => {
 
 export default function Home(props) {
   const [programs, setPrograms] = useState(props.response.programs);
-  console.log(props.response);
+  const auth = useContext(AuthContext);
+  console.log(auth);
+
   return (
     <>
       <Head>
