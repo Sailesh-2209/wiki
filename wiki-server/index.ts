@@ -96,8 +96,16 @@ mongoose
         return next();
       }
 
-      const { name, description, startedIn, endedIn, image } = req.body;
+      const {
+        createdBy,
+        name,
+        description,
+        startedIn,
+        endedIn,
+        image,
+      } = req.body;
       const { program, error } = await createProgram({
+        createdBy,
         name,
         description,
         startedIn,
@@ -132,16 +140,16 @@ mongoose
     });
 
     app.get("/programs", async (req, res, next) => {
-      if (!auth(req)) {
-        res.send({
-          programs: null,
-          error: {
-            field: "authorization",
-            message: "You are not authorized to perform this operation",
-          },
-        });
-        return next();
-      }
+      // if (!auth(req)) {
+      //   res.send({
+      //     programs: null,
+      //     error: {
+      //       field: "authorization",
+      //       message: "You are not authorized to perform this operation",
+      //     },
+      //   });
+      //   return next();
+      // }
       const { programs, error } = await getPrograms();
       res.send({
         programs,

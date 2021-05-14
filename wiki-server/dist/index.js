@@ -97,8 +97,9 @@ mongoose_1.default
             });
             return next();
         }
-        const { name, description, startedIn, endedIn, image } = req.body;
+        const { createdBy, name, description, startedIn, endedIn, image, } = req.body;
         const { program, error } = yield program_1.createProgram({
+            createdBy,
             name,
             description,
             startedIn,
@@ -131,16 +132,16 @@ mongoose_1.default
         return next();
     }));
     app.get("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!auth_1.auth(req)) {
-            res.send({
-                programs: null,
-                error: {
-                    field: "authorization",
-                    message: "You are not authorized to perform this operation",
-                },
-            });
-            return next();
-        }
+        // if (!auth(req)) {
+        //   res.send({
+        //     programs: null,
+        //     error: {
+        //       field: "authorization",
+        //       message: "You are not authorized to perform this operation",
+        //     },
+        //   });
+        //   return next();
+        // }
         const { programs, error } = yield program_1.getPrograms();
         res.send({
             programs,

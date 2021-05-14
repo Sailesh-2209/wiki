@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPrograms = exports.createProgram = void 0;
 const Program_1 = require("../models/Program");
-const createProgram = ({ name, description, startedIn, endedIn, image, }) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!name || !description || !startedIn || !endedIn || !image) {
+const createProgram = ({ createdBy, name, description, startedIn, endedIn, image, }) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!createdBy || !name || !description || !startedIn || !endedIn || !image) {
         return {
             program: null,
             error: {
@@ -21,7 +21,7 @@ const createProgram = ({ name, description, startedIn, endedIn, image, }) => __a
             },
         };
     }
-    const searchProgram = Program_1.Program.findOne({ name });
+    const searchProgram = yield Program_1.Program.findOne({ where: { name } });
     if (searchProgram) {
         return {
             program: null,
@@ -32,6 +32,7 @@ const createProgram = ({ name, description, startedIn, endedIn, image, }) => __a
         };
     }
     const newProgram = new Program_1.Program({
+        createdBy,
         name,
         description,
         startedIn,

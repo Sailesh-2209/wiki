@@ -2,6 +2,7 @@ import { Program } from "../models/Program";
 import { IProgram } from "../models/Program";
 
 interface createProgramInputInterface {
+  createdBy: string;
   name: string;
   description: string;
   startedIn: string;
@@ -20,13 +21,14 @@ interface getProgramsReturnInterface {
 export const createProgram: (
   arg0: createProgramInputInterface
 ) => Promise<createProgramReturnInterface> = async ({
+  createdBy,
   name,
   description,
   startedIn,
   endedIn,
   image,
 }) => {
-  if (!name || !description || !startedIn || !endedIn || !image) {
+  if (!createdBy || !name || !description || !startedIn || !endedIn || !image) {
     return {
       program: null,
       error: {
@@ -36,7 +38,7 @@ export const createProgram: (
     };
   }
 
-  const searchProgram = Program.findOne({ name });
+  const searchProgram = await Program.findOne({ where: { name } });
   if (searchProgram) {
     return {
       program: null,
@@ -48,6 +50,7 @@ export const createProgram: (
   }
 
   const newProgram = new Program({
+    createdBy,
     name,
     description,
     startedIn,
