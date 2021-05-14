@@ -29,10 +29,14 @@
   justify-content: space-between;
 }
 
-.navbarContent p {
+.navbarContent p a {
   margin-bottom: 15px;
+  padding-top: 20px;
   transition: 0.3s ease;
   cursor: pointer;
+}
+.navbarContent p {
+  color: red;
 }
 
 .underline {
@@ -48,10 +52,15 @@
   justify-content: flex-end;
   margin-right: 20px;
 }
-.registerContainer > p {
+.registerContainer a {
+  padding-top: 20px;
   margin-left: 40px;
+  transition: 0.3s ease;
 }
 .navbarContent p:hover {
+  color: red;
+}
+.registerContainer a:hover {
   color: red;
 }
 
@@ -71,11 +80,11 @@
   text-align: center;
   margin-right: 40px;
   flex: 1 0 21%;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 .cardContainer:hover {
   border: 2px solid rgb(136, 136, 255);
-  transform: scaleX(1.05);
+  transform: scaleX(1.02);
 }
 .cardContainer > p {
   padding: 10px;

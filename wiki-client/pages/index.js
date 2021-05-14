@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Head from "next/head";
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import { baseURL } from "../constants/baseURL";
 
@@ -35,8 +36,12 @@ export default function Home(props) {
           <div className={styles.navbarContent}>
             <p>Home</p>
             <div className={styles.registerContainer}>
-              <p>Login</p>
-              <p>Signup</p>
+              <Link href="/login">
+                <a>Login</a>
+              </Link>
+              <Link href="/login">
+                <a>Signup</a>
+              </Link>
             </div>
           </div>
           <div className={styles.underline}></div>

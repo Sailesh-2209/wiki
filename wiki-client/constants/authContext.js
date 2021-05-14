@@ -6,6 +6,14 @@ export const AuthContext = createContext({
   token: null,
 });
 
-export default AuthContextProvider = () => {
-  return <AuthContext.Provider></AuthContext.Provider>;
+export default AuthContextProvider = ({ children }) => {
+  return (
+    <AuthContext.Provider
+      value={{
+        user: "hello",
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
