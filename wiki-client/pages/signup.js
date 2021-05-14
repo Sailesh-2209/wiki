@@ -15,13 +15,13 @@ export default function Login() {
     <div className={styles.container}>
       <div className={styles.navbar}>
         <div className={styles.navbarContainer}>
-          <p>Login</p>
+          <p>Signup</p>
           <div className={styles.registerContainer}>
             <Link href="/">
               <a>Home</a>
             </Link>
-            <Link href="/signup">
-              <a>Signup</a>
+            <Link href="/login">
+              <a>Login</a>
             </Link>
           </div>
         </div>
