@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import { baseURL } from "../constants/baseURL";
 import { AuthContext } from "../constants/authContext";
+import { Programs } from "../components/Programs";
 
 const fetchData = async () => {
   let response;
@@ -69,23 +70,7 @@ export default function Home(props) {
           <div className={styles.underline}></div>
           <div className="underline"></div>
         </div>
-        <div className={styles.programsContainer}>
-          {programs.map((program) => (
-            <div key={program._id} className={styles.cardContainer}>
-              <img
-                src={program.image}
-                alt={program.name}
-                className={styles.cardImage}
-              />
-              <h3 className={styles.cardTitle}>{program.name}</h3>
-              <p className={styles.dates}>
-                {program.startedIn} - {program.endedIn}
-              </p>
-              <p className={styles.cardDescription}>{program.description}</p>
-            </div>
-          ))}
-          <img className={styles.addIcon} src="/add.svg" alt="add" />
-        </div>
+        <Programs programs={programs} loggedIn={loggedIn} />
       </div>
     </>
   );
