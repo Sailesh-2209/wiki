@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { baseURL } from "../constants/baseURL";
 
@@ -13,15 +14,10 @@ export const AuthContext = createContext({
 });
 
 export const AuthContextProvider = ({ children }) => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
-  const [valid, setValid] = useState(false);
-
-  if (typeof window !== "undefined") {
-    localStorage.setItem("shit", "ananth");
-    console.log(localStorage.getItem("shit"));
-  }
 
   const login = (username, password) => {
     axios
@@ -35,6 +31,7 @@ export const AuthContextProvider = ({ children }) => {
         setError(error);
         setToken(token);
         localStorage.setItem("jwt_token", token);
+        localStorage.setItem("uid", user._id);
       })
       .catch((error) => {
         console.log(error);
@@ -53,6 +50,7 @@ export const AuthContextProvider = ({ children }) => {
         setError(error);
         setToken(token);
         localStorage.setItem("jwt_token", token);
+        localStorage.setItem("uid", user._id);
       })
       .catch((error) => {
         console.error(error);
@@ -64,6 +62,8 @@ export const AuthContextProvider = ({ children }) => {
     setError(null);
     setToken(null);
     localStorage.removeItem("jwt_token");
+    localStorage.removeItem("uid");
+    router.push("/");
   };
 
   const checkAuth = async (token) => {

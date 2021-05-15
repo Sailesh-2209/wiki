@@ -70,7 +70,11 @@ export default function Home(props) {
           <div className={styles.underline}></div>
           <div className="underline"></div>
         </div>
-        <Programs programs={programs} loggedIn={loggedIn} />
+        <Programs
+          programs={programs}
+          setPrograms={setPrograms}
+          loggedIn={loggedIn}
+        />
       </div>
     </>
   );

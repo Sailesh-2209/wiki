@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MyModal } from "./Modal";
 import styles from "../styles/Home.module.css";
 
-export function Programs({ programs, loggedIn }) {
+export function Programs({ programs, loggedIn, setPrograms }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCreateProgram = () => {
@@ -12,15 +12,21 @@ export function Programs({ programs, loggedIn }) {
 
   return (
     <>
-      <MyModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <MyModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setPrograms={setPrograms}
+      />
       <div className={styles.programsContainer}>
         {loggedIn ? (
-          <img
-            className={styles.addIcon}
-            src="/add.svg"
-            alt="add"
-            onClick={() => handleCreateProgram()}
-          />
+          <div className={styles.imageContainer}>
+            <img
+              className={styles.addIcon}
+              src="/add.svg"
+              alt="add"
+              onClick={() => handleCreateProgram()}
+            />
+          </div>
         ) : null}
         {programs.map((program) => (
           <div key={program._id} className={styles.cardContainer}>
