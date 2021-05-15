@@ -6,7 +6,7 @@ import { AuthContext } from "../constants/authContext";
 
 export default function Login() {
   const auth = useContext(AuthContext);
-  const { user, error, token, login } = auth;
+  const { user, error, token, login, checkAuth } = auth;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -16,8 +16,10 @@ export default function Login() {
     login(username, password);
   };
 
-  useEffect(() => {
-    if (user != null && token != null && error == null) {
+  useEffect(async () => {
+    let jwtToken = localStorage.getItem("jwt_token");
+    let valid = await checkAuth(jwtToken);
+    if (valid) {
       router.push("/");
     }
   }, [user, error, token]);

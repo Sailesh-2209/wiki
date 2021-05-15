@@ -6,7 +6,7 @@ import { AuthContext } from "../constants/authContext";
 
 export default function Login() {
   const auth = useContext(AuthContext);
-  const { user, error, token, signup } = auth;
+  const { user, error, token, signup, checkAuth } = auth;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -16,8 +16,10 @@ export default function Login() {
     signup(username, password);
   };
 
-  useEffect(() => {
-    if (user != null && token && error == null) {
+  useEffect(async () => {
+    let jwtToken = localStorage.getItem("jwt_token");
+    let valid = await checkAuth(jwtToken);
+    if (valid) {
       router.push("/");
     }
   }, [user, error, token]);
@@ -41,11 +43,15 @@ export default function Login() {
       <div className={styles.loginContainer}>
         <div className={styles.loginForm}>
           <form onSubmit={(e) => handleSubmit(e)} className={styles.form}>
-            <label className={styles.formLabel} for="username">
+            <label className={styles.formLabel} htmlFor="username">
               Username
             </label>
             <input
-              className={styles.formInput}
+              className={
+                error && error.field === "username"
+                  ? styles.formError
+                  : styles.formInput
+              }
               type="text"
               id="username"
               name="username"
@@ -53,11 +59,15 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <label className={styles.formLabel} for="password">
+            <label className={styles.formLabel} htmlFor="password">
               Password
             </label>
             <input
-              className={styles.formInput}
+              className={
+                error && error.field === "password"
+                  ? styles.formError
+                  : styles.formInput
+              }
               type="password"
               id="password"
               name="password"
@@ -65,7 +75,9 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className={styles.errorContainer}></div>
+            <div className={styles.errorContainer}>
+              {error === null ? null : error.message}
+            </div>
             <button className={styles.formButton} type="submit">
               Submit
             </button>

@@ -6,20 +6,24 @@ export const AuthContext = createContext({
   user: null,
   error: null,
   token: null,
-  // setUser: () => {},
-  // setError: () => {},
-  // setToken: () => {},
   login: () => {},
   signup: () => {},
   logout: () => {},
+  checkAuth: () => {},
 });
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
+  const [valid, setValid] = useState(false);
 
-  const login = async (username, password) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("shit", "ananth");
+    console.log(localStorage.getItem("shit"));
+  }
+
+  const login = (username, password) => {
     axios
       .post(`${baseURL}/login`, {
         username,
@@ -30,13 +34,14 @@ export const AuthContextProvider = ({ children }) => {
         setUser(user);
         setError(error);
         setToken(token);
+        localStorage.setItem("jwt_token", token);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const signup = () => {
+  const signup = (username, password) => {
     axios
       .post(`${baseURL}/register`, {
         username,
@@ -47,14 +52,33 @@ export const AuthContextProvider = ({ children }) => {
         setUser(user);
         setError(error);
         setToken(token);
+        localStorage.setItem("jwt_token", token);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
 
   const logout = () => {
-    console.log("logout");
+    setUser(null);
+    setError(null);
+    setToken(null);
+    localStorage.removeItem("jwt_token");
+  };
+
+  const checkAuth = async (token) => {
+    let response = await axios.post(
+      `${baseURL}/checkauth`,
+      {
+        hello: "world",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.authorized;
   };
 
   return (
@@ -63,12 +87,10 @@ export const AuthContextProvider = ({ children }) => {
         user,
         error,
         token,
-        // setUser: () => setUser(),
-        // setError: () => setError(),
-        // setToken: () => setToken(),
         login: (username, password) => login(username, password),
         signup: (username, password) => signup(username, password),
         logout: () => logout(),
+        checkAuth: (token) => checkAuth(token),
       }}
     >
       {children}

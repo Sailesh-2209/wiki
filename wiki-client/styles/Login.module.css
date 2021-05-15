@@ -86,7 +86,7 @@
   background-color: whitesmoke;
   height: 40px;
   width: 400px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   padding-left: 15px;
   border-radius: 8px;
   transition: 0.5s ease;
@@ -109,10 +109,10 @@
 }
 .errorContainer {
   font-family: "Lato", sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: rgb(49, 62, 255);
-  height: 35px;
+  height: 38px;
   margin: auto;
 }
 .formButton {
@@ -126,7 +126,8 @@
   outline: none;
   background-color: #fe0d3b;
   margin: auto;
+  margin-top: 10px;
 }
 .formButton:active {
-  background-color: #ff3d61;
+  background-color: #ff6d88;
 }

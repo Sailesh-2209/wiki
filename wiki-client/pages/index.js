@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
@@ -25,9 +25,12 @@ export const getServerSideProps = async () => {
 };
 
 export default function Home(props) {
-  const [programs, setPrograms] = useState(props.response.programs);
   const auth = useContext(AuthContext);
-  console.log(auth);
+  const { user, error, token, logout, checkAuth } = auth;
+  const [programs, setPrograms] = useState(props.response.programs);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  console.log(checkAuth(token));
 
   return (
     <>
@@ -39,12 +42,20 @@ export default function Home(props) {
           <div className={styles.navbarContent}>
             <p>Home</p>
             <div className={styles.registerContainer}>
-              <Link href="/login">
-                <a>Login</a>
-              </Link>
-              <Link href="/login">
-                <a>Signup</a>
-              </Link>
+              {!loggedIn ? (
+                <>
+                  <Link href="/login">
+                    <a>Login</a>
+                  </Link>
+                  <Link href="/signup">
+                    <a>Signup</a>
+                  </Link>
+                </>
+              ) : (
+                <p id={styles.logout} onClick={logout()}>
+                  Logout
+                </p>
+              )}
             </div>
           </div>
           <div className={styles.underline}></div>

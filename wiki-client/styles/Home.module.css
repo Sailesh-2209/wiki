@@ -39,6 +39,17 @@
   color: red;
 }
 
+#logout {
+  color: black;
+  margin: 0;
+  padding-top: 20px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+#logout:hover {
+  color: red;
+}
+
 .underline {
   width: 1000px;
   margin: auto;
