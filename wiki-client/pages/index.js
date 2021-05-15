@@ -26,11 +26,19 @@ export const getServerSideProps = async () => {
 
 export default function Home(props) {
   const auth = useContext(AuthContext);
-  const { user, error, token, logout, checkAuth } = auth;
+  const { logout, checkAuth } = auth;
   const [programs, setPrograms] = useState(props.response.programs);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  console.log(checkAuth(token));
+  useEffect(async () => {
+    let token = localStorage.getItem("jwt_token");
+    let valid = await checkAuth(token);
+    if (valid) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  });
 
   return (
     <>
@@ -52,7 +60,7 @@ export default function Home(props) {
                   </Link>
                 </>
               ) : (
-                <p id={styles.logout} onClick={logout()}>
+                <p id={styles.logout} onClick={() => logout()}>
                   Logout
                 </p>
               )}
