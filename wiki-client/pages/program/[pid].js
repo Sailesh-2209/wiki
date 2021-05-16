@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseURL } from "../../constants/baseURL";
 import styles from "../../styles/Character.module.css";
 import { AuthContext } from "../../constants/authContext";
+import { Character } from "../../components/Character";
 
 export const getStaticPaths = async () => {
   const response = await axios
@@ -60,7 +61,8 @@ export default function ProgramPage({ characters, programs }) {
   const auth = useContext(AuthContext);
   const { logout, checkAuth } = auth;
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isOwner, setIsOwner] = useState(false);
+  const [isProgramOwner, setIsProgramOwner] = useState(false);
+  const [isCharacterOwner, setIsCharacterOwner] = useState(false);
 
   useEffect(async () => {
     let uid;
@@ -75,7 +77,6 @@ export default function ProgramPage({ characters, programs }) {
       uid = localStorage.getItem("uid");
       token = localStorage.getItem("jwt_token");
     }
-    console.log(uid, token, characters, programs);
   });
 
   return (
@@ -110,7 +111,7 @@ export default function ProgramPage({ characters, programs }) {
           <div className={styles.programHeadingContainer}>
             <p className={styles.programHeading}>{programs.programs[0].name}</p>
             <button className={styles.programDelBtn}>DELETE</button>
-            <button className={styles.programUpdBtn}>UPDATE</button>
+            <button className={styles.programUpdBtn}>EDIT</button>
           </div>
           <div className={styles.underline}></div>
           <p className={styles.programDescription}>
@@ -124,6 +125,8 @@ export default function ProgramPage({ characters, programs }) {
           />
         </div>
       </div>
+      <div className={styles.underline}></div>
+      <Character loggedIn={loggedIn} characters={characters} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200&display=swap");
 
 .charactersPage {
   background-color: #e4e4e4;
@@ -75,9 +76,10 @@
 
 .programContainer {
   width: 700px;
-  height: 400px;
+  height: 300px;
   margin: auto;
   margin-top: 40px;
+  margin-bottom: 0;
   display: flex;
   flex-direction: row;
 }
@@ -136,4 +138,61 @@
   width: 160px;
   height: 250px;
   border-radius: 20px;
+}
+.addIcon {
+  width: 140px;
+  height: 140px;
+  margin: 30px;
+  transition: 0.3s ease;
+  filter: brightness(0.9);
+}
+
+.charPageHeading {
+  font-family: "Lato";
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin: 50px;
+}
+.charactersContainer {
+  width: 1000px;
+  margin: auto;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.characterCard {
+  width: 400px;
+  max-height: 150px;
+  margin-right: 25px;
+  margin-left: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  background-color: whitesmoke;
+  border-radius: 20px;
+}
+.characterLeft {
+  max-width: 40%;
+  margin-right: 10px;
+}
+.characterLeft > img {
+  max-height: 100%;
+  width: 150px;
+  border-radius: 20px 0 0 20px;
+  margin: auto;
+}
+.characterRight > h2 {
+  font-family: "Nunito Sans", sans-serif;
+  margin: 10px;
+}
+.characterRight > h3 {
+  font-family: "Nunito Sans", sans-serif;
+  margin: 10px;
+}
+.buttonContainer {
+  margin-bottom: 10px;
+  margin-left: 20px;
 }
