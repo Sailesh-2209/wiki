@@ -1,10 +1,29 @@
 import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import Modal from "react-modal";
+import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
 import { baseURL } from "../../constants/baseURL";
 import styles from "../../styles/Character.module.css";
 import { AuthContext } from "../../constants/authContext";
 import { Character } from "../../components/Character";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    height: "150px",
+    width: "300px",
+    backgroundColor: "#efefef",
+    border: "1px solid black",
+    borderRadius: "5px",
+  },
+};
 
 export const getStaticPaths = async () => {
   const response = await axios
@@ -58,75 +77,171 @@ export const getStaticProps = async (context) => {
 };
 
 export default function ProgramPage({ characters, programs }) {
+  const router = useRouter();
+  const { pid } = router.query;
   const auth = useContext(AuthContext);
   const { logout, checkAuth } = auth;
   const [loggedIn, setLoggedIn] = useState(false);
   const [isProgramOwner, setIsProgramOwner] = useState(false);
-  const [isCharacterOwner, setIsCharacterOwner] = useState(false);
+  const [stateUID, setStateUID] = useState("");
+  const [stateToken, setStateToken] = useState("");
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [programDeleteError, setProgramDeleteError] = useState(null);
+
+  const handleConfirmModalOpen = () => {
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleDeleteProgram = async () => {
+    setIsDeleting(true);
+    const response = await axios
+      .delete(`${baseURL}/programs/${pid}`, {
+        data: {
+          uid: stateUID,
+        },
+        headers: {
+          Authorization: `Bearer ${stateToken}`,
+        },
+      })
+      .catch((error) => console.log(error));
+    if (response.data.success) {
+      setIsDeleting(false);
+      setIsConfirmModalOpen(false);
+      router.push("/");
+    } else {
+      setIsDeleting(false);
+      setProgramDeleteError(response.data.error);
+    }
+  };
+
+  const handleOnDeleteError = () => {
+    setIsConfirmModalOpen(false);
+    setProgramDeleteError(null);
+  };
 
   useEffect(async () => {
     let uid;
     let token;
+    if (typeof window !== undefined) {
+      uid = localStorage.getItem("uid");
+      token = localStorage.getItem("jwt_token");
+      setStateUID(uid);
+      setStateToken(token);
+    }
     let valid = await checkAuth(token);
     if (valid) {
       setLoggedIn(true);
     } else {
       setLoggedIn(false);
     }
-    if (typeof window !== undefined) {
-      uid = localStorage.getItem("uid");
-      token = localStorage.getItem("jwt_token");
+    if (programs.programs[0].createdBy === uid) {
+      setIsProgramOwner(true);
+    } else {
+      setIsProgramOwner(false);
     }
   });
 
   return (
-    <div className={styles.charactersPage}>
-      <div className={styles.navbar}>
-        <div className={styles.navbarContent}>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-          <div className={styles.registerContainer}>
-            {!loggedIn ? (
-              <>
-                <Link href="/login">
-                  <a>Login</a>
-                </Link>
-                <Link href="/signup">
-                  <a>Signup</a>
-                </Link>
-              </>
-            ) : (
-              <p id={styles.logout} onClick={() => logout()}>
-                Logout
+    <>
+      <Modal style={customStyles} isOpen={isConfirmModalOpen}>
+        <div className={styles.confirmModalContainer}>
+          <div className={styles.modalHeading}>
+            Do you want to delete this show?
+          </div>
+          {isDeleting ? (
+            <ClipLoader />
+          ) : programDeleteError ? (
+            <>
+              <div className={styles.modalError}>
+                &#9432; {programDeleteError.message}
+              </div>
+              <div className={styles.modalBtnContainer}>
+                <button
+                  className={styles.programDelBtn}
+                  onClick={() => handleOnDeleteError()}
+                >
+                  OK
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className={styles.modalBtnContainer}>
+              <button
+                className={styles.programDelBtn}
+                onClick={() => handleDeleteProgram()}
+              >
+                YES
+              </button>
+              <button
+                className={styles.programUpdBtn}
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                NO
+              </button>
+            </div>
+          )}
+        </div>
+      </Modal>
+      <div className={styles.charactersPage}>
+        <div className={styles.navbar}>
+          <div className={styles.navbarContent}>
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+            <div className={styles.registerContainer}>
+              {!loggedIn ? (
+                <>
+                  <Link href="/login">
+                    <a>Login</a>
+                  </Link>
+                  <Link href="/signup">
+                    <a>Signup</a>
+                  </Link>
+                </>
+              ) : (
+                <p id={styles.logout} onClick={() => logout()}>
+                  Logout
+                </p>
+              )}
+            </div>
+          </div>
+          <div className={styles.underline}></div>
+          <div className="underline"></div>
+        </div>
+        <div className={styles.programContainer}>
+          <div className={styles.programLeft}>
+            <div className={styles.programHeadingContainer}>
+              <p className={styles.programHeading}>
+                {programs.programs[0].name}
               </p>
-            )}
+              {isProgramOwner && loggedIn ? (
+                <>
+                  <button
+                    className={styles.programDelBtn}
+                    onClick={() => handleConfirmModalOpen()}
+                  >
+                    DELETE
+                  </button>
+                  <button className={styles.programUpdBtn}>EDIT</button>
+                </>
+              ) : null}
+            </div>
+            <div className={styles.underline}></div>
+            <p className={styles.programDescription}>
+              {programs.programs[0].description}
+            </p>
+          </div>
+          <div className={styles.programRight}>
+            <img
+              src={programs.programs[0].image}
+              alt={programs.programs[0].name}
+            />
           </div>
         </div>
         <div className={styles.underline}></div>
-        <div className="underline"></div>
+        <Character loggedIn={loggedIn} characters={characters} uid={stateUID} />
       </div>
-      <div className={styles.programContainer}>
-        <div className={styles.programLeft}>
-          <div className={styles.programHeadingContainer}>
-            <p className={styles.programHeading}>{programs.programs[0].name}</p>
-            <button className={styles.programDelBtn}>DELETE</button>
-            <button className={styles.programUpdBtn}>EDIT</button>
-          </div>
-          <div className={styles.underline}></div>
-          <p className={styles.programDescription}>
-            {programs.programs[0].description}
-          </p>
-        </div>
-        <div className={styles.programRight}>
-          <img
-            src={programs.programs[0].image}
-            alt={programs.programs[0].name}
-          />
-        </div>
-      </div>
-      <div className={styles.underline}></div>
-      <Character loggedIn={loggedIn} characters={characters} />
-    </div>
+    </>
   );
 }
