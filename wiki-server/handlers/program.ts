@@ -38,7 +38,9 @@ export const createProgram: (
     };
   }
 
-  const searchProgram = await Program.findOne({ where: { name } });
+  const searchProgram = await Program.findOne({ where: { name } }).catch(
+    (error) => console.log(error)
+  );
   if (searchProgram) {
     return {
       program: null,
@@ -57,7 +59,7 @@ export const createProgram: (
     endedIn,
     image,
   });
-  const program = await newProgram.save();
+  const program = await newProgram.save().catch((error) => console.log(error));
 
   if (!program) {
     return {
@@ -75,20 +77,21 @@ export const createProgram: (
   };
 };
 
-export const getPrograms: () => Promise<getProgramsReturnInterface> = async () => {
-  let document = await Program.find({});
-  if (document) {
-    return {
-      programs: document,
-      error: null,
-    };
-  } else {
-    return {
-      programs: null,
-      error: {
-        field: "database",
-        message: "Could not find program data. Try again later",
-      },
-    };
-  }
-};
+export const getPrograms: () => Promise<getProgramsReturnInterface> =
+  async () => {
+    let document = await Program.find({}).catch((error) => console.log(error));
+    if (document) {
+      return {
+        programs: document,
+        error: null,
+      };
+    } else {
+      return {
+        programs: null,
+        error: {
+          field: "database",
+          message: "Could not find program data. Try again later",
+        },
+      };
+    }
+  };

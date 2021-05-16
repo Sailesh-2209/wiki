@@ -59,6 +59,7 @@ mongoose_1.default
     }));
     app.post("/checkauth", (req, res, next) => {
         const authorized = auth_1.auth(req);
+        console.log(req.headers);
         res.send({
             authorized,
         });

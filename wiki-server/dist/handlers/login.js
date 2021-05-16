@@ -17,7 +17,7 @@ const User_1 = require("../models/User");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const login = (username, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield User_1.User.findOne({ username });
+    const user = yield User_1.User.findOne({ username }).catch((error) => console.log(error));
     if (!user) {
         return {
             user: null,
@@ -28,7 +28,9 @@ const login = (username, password) => __awaiter(void 0, void 0, void 0, function
             token: null,
         };
     }
-    const match = yield bcrypt_1.default.compare(password, user.password);
+    const match = yield bcrypt_1.default
+        .compare(password, user.password)
+        .catch((error) => console.log(error));
     if (!match) {
         return {
             user: null,

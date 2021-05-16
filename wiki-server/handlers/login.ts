@@ -12,7 +12,9 @@ export const login: (
   username: string,
   password: string
 ) => Promise<LoginReturn> = async (username, password) => {
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).catch((error) =>
+    console.log(error)
+  );
   if (!user) {
     return {
       user: null,
@@ -23,7 +25,9 @@ export const login: (
       token: null,
     };
   }
-  const match = await bcrypt.compare(password, user.password);
+  const match = await bcrypt
+    .compare(password, user.password)
+    .catch((error) => console.log(error));
   if (!match) {
     return {
       user: null,

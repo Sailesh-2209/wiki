@@ -80,7 +80,9 @@ export const register: (
     };
   }
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).catch((error) =>
+    console.log(error)
+  );
   if (user) {
     return {
       user: null,
@@ -92,12 +94,24 @@ export const register: (
     };
   }
 
-  const hash = await bcrypt.hash(password, 12);
+  const hash = await bcrypt
+    .hash(password, 12)
+    .catch((error) => console.log(error));
   const newUser = await User.create({
     username,
     password: hash,
     createdAt: new Date(),
-  });
+  }).catch((error) => console.log(error));
+  if (!newUser) {
+    return {
+      user: null,
+      error: {
+        field: "database",
+        message: "Database error. Try again later",
+      },
+      token: null,
+    };
+  }
   const token = jwt.sign(
     {
       uid: newUser._id,

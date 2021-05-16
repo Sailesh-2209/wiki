@@ -76,7 +76,7 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
             token: null,
         };
     }
-    const user = yield User_1.User.findOne({ username });
+    const user = yield User_1.User.findOne({ username }).catch((error) => console.log(error));
     if (user) {
         return {
             user: null,
@@ -87,12 +87,24 @@ const register = (username, password) => __awaiter(void 0, void 0, void 0, funct
             token: null,
         };
     }
-    const hash = yield bcrypt_1.default.hash(password, 12);
+    const hash = yield bcrypt_1.default
+        .hash(password, 12)
+        .catch((error) => console.log(error));
     const newUser = yield User_1.User.create({
         username,
         password: hash,
         createdAt: new Date(),
-    });
+    }).catch((error) => console.log(error));
+    if (!newUser) {
+        return {
+            user: null,
+            error: {
+                field: "database",
+                message: "Database error. Try again later",
+            },
+            token: null,
+        };
+    }
     const token = jsonwebtoken_1.default.sign({
         uid: newUser._id,
     }, process.env.SECRET, { expiresIn: "2h" });

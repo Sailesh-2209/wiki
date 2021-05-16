@@ -13,7 +13,7 @@ exports.getCharacters = exports.createCharacter = void 0;
 const Program_1 = require("../models/Program");
 const Character_1 = require("../models/Character");
 const createCharacter = (pid, req) => __awaiter(void 0, void 0, void 0, function* () {
-    const program = yield Program_1.Program.findById(pid);
+    const program = yield Program_1.Program.findById(pid).catch((error) => console.log(error));
     if (!program) {
         return {
             character: null,
@@ -41,7 +41,9 @@ const createCharacter = (pid, req) => __awaiter(void 0, void 0, void 0, function
         image,
         actor,
     });
-    const character = yield newCharacter.save();
+    const character = yield newCharacter
+        .save()
+        .catch((error) => console.log(error));
     if (character) {
         return {
             character,
@@ -60,7 +62,7 @@ const createCharacter = (pid, req) => __awaiter(void 0, void 0, void 0, function
 });
 exports.createCharacter = createCharacter;
 const getCharacters = (pid) => __awaiter(void 0, void 0, void 0, function* () {
-    let document = yield Character_1.Character.find({ show: pid });
+    let document = yield Character_1.Character.find({ show: pid }).catch((error) => console.log(error));
     if (document) {
         return {
             characters: document,

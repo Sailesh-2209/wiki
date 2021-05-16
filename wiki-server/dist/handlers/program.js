@@ -21,7 +21,7 @@ const createProgram = ({ createdBy, name, description, startedIn, endedIn, image
             },
         };
     }
-    const searchProgram = yield Program_1.Program.findOne({ where: { name } });
+    const searchProgram = yield Program_1.Program.findOne({ where: { name } }).catch((error) => console.log(error));
     if (searchProgram) {
         return {
             program: null,
@@ -39,7 +39,7 @@ const createProgram = ({ createdBy, name, description, startedIn, endedIn, image
         endedIn,
         image,
     });
-    const program = yield newProgram.save();
+    const program = yield newProgram.save().catch((error) => console.log(error));
     if (!program) {
         return {
             program: null,
@@ -56,7 +56,7 @@ const createProgram = ({ createdBy, name, description, startedIn, endedIn, image
 });
 exports.createProgram = createProgram;
 const getPrograms = () => __awaiter(void 0, void 0, void 0, function* () {
-    let document = yield Program_1.Program.find({});
+    let document = yield Program_1.Program.find({}).catch((error) => console.log(error));
     if (document) {
         return {
             programs: document,

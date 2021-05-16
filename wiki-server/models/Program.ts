@@ -27,12 +27,10 @@ const programSchema = new Schema({
   startedIn: {
     type: String,
     required: true,
-    unique: true,
   },
   endedIn: {
     type: String,
     required: true,
-    unique: true,
   },
   image: {
     type: String,

@@ -9,7 +9,9 @@ export const createCharacter: (
   character: IChar | null;
   error: { field: string; message: string } | null;
 }> = async (pid, req) => {
-  const program = await Program.findById(pid);
+  const program = await Program.findById(pid).catch((error) =>
+    console.log(error)
+  );
 
   if (!program) {
     return {
@@ -41,7 +43,9 @@ export const createCharacter: (
     image,
     actor,
   });
-  const character = await newCharacter.save();
+  const character = await newCharacter
+    .save()
+    .catch((error) => console.log(error));
 
   if (character) {
     return {
@@ -60,13 +64,13 @@ export const createCharacter: (
   }
 };
 
-export const getCharacters: (
-  pid: string
-) => Promise<{
+export const getCharacters: (pid: string) => Promise<{
   characters: IChar[] | null;
   error: { field: string; message: string } | null;
 }> = async (pid) => {
-  let document = await Character.find({ show: pid });
+  let document = await Character.find({ show: pid }).catch((error) =>
+    console.log(error)
+  );
   if (document) {
     return {
       characters: document,
