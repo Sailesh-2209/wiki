@@ -16,6 +16,7 @@ export function Programs({ programs, loggedIn, setPrograms }) {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         setPrograms={setPrograms}
+        programs={programs}
       />
       <div className={styles.programsContainer}>
         {loggedIn ? (
