@@ -45,7 +45,7 @@ const createProgram = ({ createdBy, name, description, startedIn, endedIn, image
             program: null,
             error: {
                 field: "database",
-                message: "There was an error in creating this program. Try again later",
+                message: "There was an error in creating this program. Try again later. Make sure that the program doesn't already exists and that the description and image are unique.",
             },
         };
     }

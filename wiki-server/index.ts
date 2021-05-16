@@ -162,16 +162,6 @@ mongoose
     });
 
     app.get("/programs/:pid", async (req, res, next) => {
-      if (!auth(req)) {
-        res.send({
-          programs: null,
-          error: {
-            field: "authorization",
-            message: "You are not authorized to perform this operation",
-          },
-        });
-        return next();
-      }
       const { characters, error } = await getCharacters(req.params.pid);
       res.send({
         characters,

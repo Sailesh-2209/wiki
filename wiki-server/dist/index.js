@@ -158,16 +158,6 @@ mongoose_1.default
         return next();
     }));
     app.get("/programs/:pid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!auth_1.auth(req)) {
-            res.send({
-                programs: null,
-                error: {
-                    field: "authorization",
-                    message: "You are not authorized to perform this operation",
-                },
-            });
-            return next();
-        }
         const { characters, error } = yield character_1.getCharacters(req.params.pid);
         res.send({
             characters,
