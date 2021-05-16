@@ -7,7 +7,7 @@ import { User } from "./models/User";
 import { register } from "./handlers/register";
 import { login } from "./handlers/login";
 import { auth } from "./utils/auth";
-import { createProgram, getPrograms } from "./handlers/program";
+import { createProgram, getPrograms, deleteProgram } from "./handlers/program";
 import { createCharacter, getCharacters } from "./handlers/character";
 
 dotenv.config();
@@ -165,6 +165,27 @@ mongoose
       const { characters, error } = await getCharacters(req.params.pid);
       res.send({
         characters,
+        error,
+      });
+      return next();
+    });
+
+    app.delete("/programs/:pid", async (req, res, next) => {
+      const pid = req.params.pid;
+      const uid = req.body.uid;
+      if (!auth(req)) {
+        res.send({
+          success: false,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        return next();
+      }
+      const { success, error } = await deleteProgram(uid, pid);
+      res.send({
+        success,
         error,
       });
       return next();

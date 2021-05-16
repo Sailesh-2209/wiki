@@ -96,3 +96,52 @@ export const getPrograms: () => Promise<getProgramsReturnInterface> =
       };
     }
   };
+
+export const deleteProgram: (
+  uid: string,
+  pid: string
+) => Promise<{
+  success: boolean;
+  error: { field: string; message: string } | null;
+}> = async (uid, pid) => {
+  let document = await Program.findOne({ _id: pid }).catch((error) =>
+    console.log(error)
+  );
+  let error = null;
+  if (!document) {
+    return {
+      success: false,
+      error: {
+        field: "database",
+        message: "Could not find program data. Try again later",
+      },
+    };
+  }
+  if (document!.createdBy !== uid) {
+    return {
+      success: false,
+      error: {
+        field: "authorization",
+        message: "You are not authorized to perform this operation",
+      },
+    };
+  }
+  await Program.findByIdAndDelete(pid).catch((err) => {
+    error = err;
+    console.log(error);
+  });
+  if (error) {
+    return {
+      success: false,
+      error: {
+        field: "",
+        message: "",
+      },
+    };
+  } else {
+    return {
+      success: true,
+      error: null,
+    };
+  }
+};

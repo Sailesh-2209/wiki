@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPrograms = exports.createProgram = void 0;
+exports.deleteProgram = exports.getPrograms = exports.createProgram = void 0;
 const Program_1 = require("../models/Program");
 const createProgram = ({ createdBy, name, description, startedIn, endedIn, image, }) => __awaiter(void 0, void 0, void 0, function* () {
     if (!createdBy || !name || !description || !startedIn || !endedIn || !image) {
@@ -74,3 +74,45 @@ const getPrograms = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getPrograms = getPrograms;
+const deleteProgram = (uid, pid) => __awaiter(void 0, void 0, void 0, function* () {
+    let document = yield Program_1.Program.findOne({ _id: pid }).catch((error) => console.log(error));
+    let error = null;
+    if (!document) {
+        return {
+            success: false,
+            error: {
+                field: "database",
+                message: "Could not find program data. Try again later",
+            },
+        };
+    }
+    if (document.createdBy !== uid) {
+        return {
+            success: false,
+            error: {
+                field: "authorization",
+                message: "You are not authorized to perform this operation",
+            },
+        };
+    }
+    yield Program_1.Program.findByIdAndDelete(pid).catch((err) => {
+        error = err;
+        console.log(error);
+    });
+    if (error) {
+        return {
+            success: false,
+            error: {
+                field: "",
+                message: "",
+            },
+        };
+    }
+    else {
+        return {
+            success: true,
+            error: null,
+        };
+    }
+});
+exports.deleteProgram = deleteProgram;
