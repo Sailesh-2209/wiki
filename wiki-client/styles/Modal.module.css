@@ -48,8 +48,22 @@
   background-color: white;
   border: 1px solid blue;
 }
-.image > .input {
+.description > .input {
+  overflow-y: scroll;
   height: 130px;
+}
+.description > .input::-webkit-scrollbar {
+  width: 3px;
+  height: 10px;
+}
+.description > .input::-webkit-scrollbar-thumb {
+  width: 2px;
+  height: 10px;
+  background-color: #555555;
+}
+.description > .input::-webkit-scrollbar-button {
+  width: 2px;
+  height: 10px;
 }
 
 .footer {
@@ -90,4 +104,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.errorContainer {
+  height: 420px;
+  text-align: center;
+  padding-top: 180px;
+}
+.errorContainer > p {
+  font-family: "Oxygen", sans-serif;
+  font-size: 18px;
+  color: red;
 }

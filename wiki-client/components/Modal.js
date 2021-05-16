@@ -32,6 +32,7 @@ export function MyModal({ isOpen, setIsOpen, setPrograms, programs }) {
 
   const closeModal = () => {
     setIsOpen(false);
+    setNewError(false);
   };
 
   const handleSave = () => {
@@ -56,21 +57,23 @@ export function MyModal({ isOpen, setIsOpen, setPrograms, programs }) {
         }
       )
       .then((value) => {
-        console.log(value.data);
         setSaving(false);
         if (value.data.error !== null) {
           setNewError(value.data.error);
         } else {
           setIsOpen(false);
-          setPrograms((programs) => {
-            console.log(value.data.program);
-            console.log(programs.concat(value.data.programs));
-            return programs.concat(value.data.programs);
-          });
+          let newProg = [value.data.program];
+          let newProgArray = programs.concat(newProg);
+          setPrograms(newProgArray);
+          setName("");
+          setDescription("");
+          setStart("");
+          setEnd("");
+          setImgAddress("");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setSaving(false);
       });
   };
@@ -93,75 +96,81 @@ export function MyModal({ isOpen, setIsOpen, setPrograms, programs }) {
               <h2 className={styles.heading}>Add a new show</h2>
             </div>
             <div className={styles.divider}></div>
-            <div className={styles.modalBody}>
-              <form className={styles.form}>
-                <div className={styles.name}>
-                  <label className={styles.label} htmlFor="name">
-                    Name
+            {newError ? (
+              <div className={styles.errorContainer}>
+                <p>{newError.message}</p>
+              </div>
+            ) : (
+              <div className={styles.modalBody}>
+                <form className={styles.form}>
+                  <div className={styles.name}>
+                    <label className={styles.label} htmlFor="name">
+                      Name
+                    </label>
+                    <input
+                      className={styles.input}
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.description}>
+                    <label className={styles.label} htmlFor="description">
+                      Description
+                    </label>
+                    <textarea
+                      type="text"
+                      id="description"
+                      name="description"
+                      className={styles.input}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
+                </form>
+                <div className={styles.dates}>
+                  <label className={styles.label} htmlFor="start">
+                    Started in
                   </label>
                   <input
-                    className={styles.input}
                     type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    id="start"
+                    name="start"
+                    className={styles.input}
+                    value={start}
+                    onChange={(e) => setStart(e.target.value)}
                   />
                 </div>
-                <div className={styles.description}>
-                  <label className={styles.label} htmlFor="description">
-                    Description
+                <div className={styles.dates}>
+                  <label className={styles.label} htmlFor="end">
+                    Ended in
                   </label>
                   <input
                     type="text"
-                    id="description"
-                    name="description"
+                    id="end"
+                    name="end"
                     className={styles.input}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={end}
+                    onChange={(e) => setEnd(e.target.value)}
                   />
                 </div>
-              </form>
-              <div className={styles.dates}>
-                <label className={styles.label} htmlFor="start">
-                  Started in
-                </label>
-                <input
-                  type="text"
-                  id="start"
-                  name="start"
-                  className={styles.input}
-                  value={start}
-                  onChange={(e) => setStart(e.target.value)}
-                />
+                <div className={styles.image}>
+                  <label className={styles.label} htmlFor="image">
+                    Image Address
+                  </label>
+                  <input
+                    type="text"
+                    id="image"
+                    name="image"
+                    className={styles.input}
+                    value={imgAddress}
+                    onChange={(e) => setImgAddress(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className={styles.dates}>
-                <label className={styles.label} htmlFor="end">
-                  Ended in
-                </label>
-                <input
-                  type="text"
-                  id="end"
-                  name="end"
-                  className={styles.input}
-                  value={end}
-                  onChange={(e) => setEnd(e.target.value)}
-                />
-              </div>
-              <div className={styles.image}>
-                <label className={styles.label} htmlFor="image">
-                  Image Address
-                </label>
-                <textarea
-                  type="text"
-                  id="image"
-                  name="image"
-                  className={styles.input}
-                  value={imgAddress}
-                  onChange={(e) => setImgAddress(e.target.value)}
-                />
-              </div>
-            </div>
+            )}
             <div className={styles.divider}></div>
             <div className={styles.footer}>
               <button
