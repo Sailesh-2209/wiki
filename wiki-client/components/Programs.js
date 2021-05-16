@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { MyModal } from "./Modal";
 import styles from "../styles/Home.module.css";
 
 export function Programs({ programs, loggedIn, setPrograms }) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCreateProgram = () => {
     console.log(loggedIn);
     setIsOpen(true);
+  };
+
+  const handleRoute = (pid) => {
+    router.push(`program/${pid}`);
   };
 
   return (
@@ -30,7 +36,11 @@ export function Programs({ programs, loggedIn, setPrograms }) {
           </div>
         ) : null}
         {programs.map((program) => (
-          <div key={program._id} className={styles.cardContainer}>
+          <div
+            key={program._id}
+            className={styles.cardContainer}
+            onClick={() => handleRoute(program._id)}
+          >
             <img
               src={program.image}
               alt={program.name}

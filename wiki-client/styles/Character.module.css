@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+.charactersPage {
+  background-color: #e4e4e4;
+  min-height: 100vh;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  width: 1000px;
+  margin: auto;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.navbarContent {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  color: black;
+  font-weight: 400;
+  display: flex;
+  margin-left: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.navbarContent a {
+  margin-bottom: 15px;
+  padding-top: 20px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+#logout {
+  color: black;
+  margin: 0;
+  padding-top: 20px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+#logout:hover {
+  color: red;
+}
+
+.underline {
+  width: 1000px;
+  margin: auto;
+  height: 2px;
+  background-color: black;
+}
+
+.registerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: 20px;
+}
+.registerContainer a {
+  padding-top: 20px;
+  margin-left: 40px;
+  transition: 0.3s ease;
+}
+.navbarContent a:hover {
+  color: red;
+}
+.registerContainer a:hover {
+  color: red;
+}
+
+.programContainer {
+  width: 700px;
+  height: 400px;
+  margin: auto;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+}
+.programContainer .underline {
+  width: 100%;
+  height: 1px;
+}
+.programHeadingContainer {
+  display: flex;
+  flex-direction: row;
+  max-height: 50px;
+}
+.programLeft {
+  margin-right: 20px;
+  min-width: 500px;
+}
+.programHeading {
+  font-family: "Lato", sans-serif;
+  font-size: 22px;
+}
+.programDelBtn,
+.programUpdBtn {
+  font-family: "Oxygen", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  width: 60px;
+  height: 30px;
+  margin-right: 20px;
+  margin-top: 15px;
+  margin-left: auto;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+.programUpdBtn {
+  margin-left: 10px;
+  background-color: rgb(82, 82, 255, 0.9);
+}
+.programUpdBtn:hover {
+  background-color: rgb(36, 36, 255);
+}
+.programDelBtn {
+  background-color: rgb(255, 82, 82, 0.9);
+}
+.programDelBtn:hover {
+  background-color: rgb(255, 45, 45);
+}
+.programDescription {
+  font-family: "Oxygen", sans-serif;
+  font-size: 16px;
+  padding: 20px;
+}
+.programRight > img {
+  width: 160px;
+  height: 250px;
+  border-radius: 20px;
+}

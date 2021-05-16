@@ -97,8 +97,9 @@
   transition: 0.1s;
 }
 .cardContainer:hover {
-  border: 2px solid rgb(136, 136, 255);
-  transform: scaleX(1.02);
+  cursor: pointer;
+  filter: brightness(1.1);
+  transform: scale(1.03);
 }
 .cardContainer > p {
   padding: 10px;
