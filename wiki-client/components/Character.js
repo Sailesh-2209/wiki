@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import styles from "../styles/Character.module.css";
 import EditCharacterModal from "./EditCharacterModal";
+import DeleteCharacterModal from "./DeleteCharacterModal";
 
 export function Character({
   loggedIn,
@@ -11,12 +11,12 @@ export function Character({
   pid,
   token,
 }) {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [actor, setActor] = useState("");
   const [image, setImage] = useState("");
   const [cid, setCid] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleCharacterEdit = (charName, charActor, charImage, charId) => {
     setIsOpen(true);
@@ -24,6 +24,11 @@ export function Character({
     setActor(charActor);
     setImage(charImage);
     setCid(charId);
+  };
+
+  const handleCharacterDelete = (charId) => {
+    setCid(charId);
+    setIsDeleteOpen(true);
   };
 
   return (
@@ -39,6 +44,14 @@ export function Character({
         setImage={setImage}
         cid={cid}
         setCid={setCid}
+        pid={pid}
+        token={token}
+        uid={uid}
+      />
+      <DeleteCharacterModal
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        cid={cid}
         pid={pid}
         token={token}
         uid={uid}
@@ -72,7 +85,12 @@ export function Character({
               <div className={styles.buttonContainer}>
                 {character.createdBy === uid && loggedIn ? (
                   <>
-                    <button className={styles.programDelBtn}>DELETE</button>
+                    <button
+                      className={styles.programDelBtn}
+                      onClick={() => handleCharacterDelete(character._id)}
+                    >
+                      DELETE
+                    </button>
                     <button
                       className={styles.programUpdBtn}
                       onClick={() =>

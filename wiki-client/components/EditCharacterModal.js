@@ -70,6 +70,7 @@ export default function EditCharacterModal(props) {
         console.log(value);
       })
       .catch((error) => {
+        Router.reload();
         console.log(error);
       });
   };
