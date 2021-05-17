@@ -33,11 +33,9 @@ const customStyles2 = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    height: "150px",
-    width: "300px",
+    height: "600px",
+    width: "550px",
     backgroundColor: "#efefef",
-    border: "1px solid black",
-    borderRadius: "5px",
   },
 };
 
@@ -105,6 +103,15 @@ export default function ProgramPage({ characters, programs }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [programDeleteError, setProgramDeleteError] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [name, setName] = useState(programs.programs[0].name);
+  const [description, setDescription] = useState(
+    programs.programs[0].description
+  );
+  const [start, setStart] = useState(programs.programs[0].startedIn);
+  const [end, setEnd] = useState(programs.programs[0].endedIn);
+  const [imgAddress, setImgAddress] = useState(programs.programs[0].image);
+  const [saving, setSaving] = useState(false);
+  const [newError, setNewError] = useState(null);
 
   const handleConfirmModalOpen = () => {
     setIsConfirmModalOpen(true);
@@ -177,6 +184,23 @@ export default function ProgramPage({ characters, programs }) {
         handleDeleteProgram={handleDeleteProgram}
         setIsConfirmModalOpen={setIsConfirmModalOpen}
         setIsEditModalOpen={setIsEditModalOpen}
+        name={name}
+        description={description}
+        start={start}
+        end={end}
+        imgAddress={imgAddress}
+        saving={saving}
+        newError={newError}
+        setName={setName}
+        setDescription={setDescription}
+        setStart={setStart}
+        setEnd={setEnd}
+        setImgAddress={setImgAddress}
+        setSaving={setSaving}
+        setNewError={setNewError}
+        stateUID={stateUID}
+        stateToken={stateToken}
+        pid={pid}
       />
       <div className={styles.charactersPage}>
         <div className={styles.navbar}>
