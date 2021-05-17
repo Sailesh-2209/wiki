@@ -1,17 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../styles/Character.module.css";
+import EditCharacterModal from "./EditCharacterModal";
 
 export function Character({
   loggedIn,
   characters,
   uid,
   setIsCreateCharacterModalOpen,
+  pid,
+  token,
 }) {
   const router = useRouter();
+  const [name, setName] = useState("");
+  const [actor, setActor] = useState("");
+  const [image, setImage] = useState("");
+  const [cid, setCid] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleCharacterEdit = (charName, charActor, charImage, charId) => {
+    setIsOpen(true);
+    setName(charName);
+    setActor(charActor);
+    setImage(charImage);
+    setCid(charId);
+  };
 
   return (
     <>
+      <EditCharacterModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        name={name}
+        setName={setName}
+        actor={actor}
+        setActor={setActor}
+        image={image}
+        setImage={setImage}
+        cid={cid}
+        setCid={setCid}
+        pid={pid}
+        token={token}
+        uid={uid}
+      />
       <div className={styles.charPageHeading}>Characters</div>
       <div className={styles.charactersContainer}>
         {loggedIn ? (
@@ -42,7 +73,19 @@ export function Character({
                 {character.createdBy === uid && loggedIn ? (
                   <>
                     <button className={styles.programDelBtn}>DELETE</button>
-                    <button className={styles.programUpdBtn}>EDIT</button>
+                    <button
+                      className={styles.programUpdBtn}
+                      onClick={() =>
+                        handleCharacterEdit(
+                          character.name,
+                          character.actor,
+                          character.image,
+                          character._id
+                        )
+                      }
+                    >
+                      EDIT
+                    </button>
                   </>
                 ) : null}
               </div>

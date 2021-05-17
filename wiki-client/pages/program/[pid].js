@@ -279,6 +279,8 @@ export default function ProgramPage({ characters, programs }) {
           characters={characters}
           uid={stateUID}
           setIsCreateCharacterModalOpen={setIsCreateCharacterModalOpen}
+          pid={pid}
+          token={stateToken}
         />
       </div>
     </>
