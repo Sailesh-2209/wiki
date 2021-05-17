@@ -115,3 +115,14 @@
   font-size: 18px;
   color: red;
 }
+
+.createCharErrCont {
+  height: 220px;
+  text-align: center;
+  padding-top: 70px;
+}
+.createCharErrCont > p {
+  font-family: "Oxygen", sans-serif;
+  font-size: 18px;
+  color: red;
+}

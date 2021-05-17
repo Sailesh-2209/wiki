@@ -9,6 +9,7 @@ import styles from "../../styles/Character.module.css";
 import { AuthContext } from "../../constants/authContext";
 import { Character } from "../../components/Character";
 import CharacterModals from "../../components/CharacterModals";
+import CreateCharacterModal from "../../components/CreateCharacterModal";
 
 const customStyles = {
   content: {
@@ -112,6 +113,8 @@ export default function ProgramPage({ characters, programs }) {
   const [imgAddress, setImgAddress] = useState(programs.programs[0].image);
   const [saving, setSaving] = useState(false);
   const [newError, setNewError] = useState(null);
+  const [isCreateCharacterModalOpen, setIsCreateCharacterModalOpen] =
+    useState(false);
 
   const handleConfirmModalOpen = () => {
     setIsConfirmModalOpen(true);
@@ -202,6 +205,13 @@ export default function ProgramPage({ characters, programs }) {
         stateToken={stateToken}
         pid={pid}
       />
+      <CreateCharacterModal
+        isCreateCharacterModalOpen={isCreateCharacterModalOpen}
+        setIsCreateCharacterModalOpen={setIsCreateCharacterModalOpen}
+        stateUID={stateUID}
+        stateToken={stateToken}
+        pid={pid}
+      />
       <div className={styles.charactersPage}>
         <div className={styles.navbar}>
           <div className={styles.navbarContent}>
@@ -264,7 +274,12 @@ export default function ProgramPage({ characters, programs }) {
           </div>
         </div>
         <div className={styles.underline}></div>
-        <Character loggedIn={loggedIn} characters={characters} uid={stateUID} />
+        <Character
+          loggedIn={loggedIn}
+          characters={characters}
+          uid={stateUID}
+          setIsCreateCharacterModalOpen={setIsCreateCharacterModalOpen}
+        />
       </div>
     </>
   );

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../styles/Character.module.css";
 
-export function Character({ loggedIn, characters, uid }) {
+export function Character({
+  loggedIn,
+  characters,
+  uid,
+  setIsCreateCharacterModalOpen,
+}) {
   const router = useRouter();
 
   return (
@@ -16,7 +21,12 @@ export function Character({ loggedIn, characters, uid }) {
             </div>
             <div className={styles.characterRight}>
               <h2>Add Character</h2>
-              <button className={styles.programUpdBtn}>+ ADD</button>
+              <button
+                className={styles.programUpdBtn}
+                onClick={() => setIsCreateCharacterModalOpen(true)}
+              >
+                + ADD
+              </button>
             </div>
           </div>
         ) : null}
