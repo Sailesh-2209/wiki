@@ -86,3 +86,60 @@ export const getCharacters: (pid: string) => Promise<{
     };
   }
 };
+
+export const updateCharacter: (arg0: {
+  name: string;
+  actor: string;
+  image: string;
+  cid: string;
+  pid: string;
+  uid: string;
+}) => Promise<{
+  character: null | IChar;
+  error: null | {
+    field: string;
+    message: string;
+  };
+}> = async ({ name, actor, image, cid, pid, uid }) => {
+  let document = await Character.findById(cid).catch((error) =>
+    console.log(error)
+  );
+  if (!document) {
+    return {
+      character: null,
+      error: {
+        field: "database",
+        message: "Could not find program data. Try again later",
+      },
+    };
+  }
+  if (document.createdBy !== uid) {
+    return {
+      character: null,
+      error: {
+        field: "authorization",
+        message: "You are not authorized to perform this operation",
+      },
+    };
+  }
+
+  let character = await Character.findByIdAndUpdate(cid, {
+    name,
+    actor,
+    image,
+  }).catch((error) => console.log(error));
+  if (character) {
+    return {
+      character,
+      error: null,
+    };
+  } else {
+    return {
+      character: null,
+      error: {
+        field: "database",
+        message: "Could not find program data. Try again later",
+      },
+    };
+  }
+};

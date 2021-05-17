@@ -13,7 +13,11 @@ import {
   updateProgram,
   deleteProgram,
 } from "./handlers/program";
-import { createCharacter, getCharacters } from "./handlers/character";
+import {
+  createCharacter,
+  getCharacters,
+  updateCharacter,
+} from "./handlers/character";
 
 dotenv.config();
 
@@ -214,6 +218,34 @@ mongoose
       const { success, error } = await deleteProgram(uid, pid);
       res.send({
         success,
+        error,
+      });
+      return next();
+    });
+
+    app.post("/programs/:pid/:cid", async (req, res, next) => {
+      const { pid, cid } = req.params;
+      if (!auth(req)) {
+        res.send({
+          character: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        return next();
+      }
+      const { name, actor, image, uid } = req.body;
+      const { character, error } = await updateCharacter({
+        name,
+        actor,
+        image,
+        cid,
+        pid,
+        uid,
+      });
+      res.send({
+        character,
         error,
       });
       return next();

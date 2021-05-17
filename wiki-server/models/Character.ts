@@ -1,6 +1,7 @@
 import { Document, Model, model, Schema } from "mongoose";
 
 export interface IChar extends Document {
+  createdBy: string;
   show: string;
   name: string;
   image: string;

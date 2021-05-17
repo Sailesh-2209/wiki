@@ -207,6 +207,33 @@ mongoose_1.default
         });
         return next();
     }));
+    app.post("/programs/:pid/:cid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const { pid, cid } = req.params;
+        if (!auth_1.auth(req)) {
+            res.send({
+                character: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
+            });
+            return next();
+        }
+        const { name, actor, image, uid } = req.body;
+        const { character, error } = yield character_1.updateCharacter({
+            name,
+            actor,
+            image,
+            cid,
+            pid,
+            uid,
+        });
+        res.send({
+            character,
+            error,
+        });
+        return next();
+    }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });

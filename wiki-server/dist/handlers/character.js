@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCharacters = exports.createCharacter = void 0;
+exports.updateCharacter = exports.getCharacters = exports.createCharacter = void 0;
 const Program_1 = require("../models/Program");
 const Character_1 = require("../models/Character");
 const createCharacter = (pid, req) => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,3 +80,45 @@ const getCharacters = (pid) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getCharacters = getCharacters;
+const updateCharacter = ({ name, actor, image, cid, pid, uid }) => __awaiter(void 0, void 0, void 0, function* () {
+    let document = yield Character_1.Character.findById(cid).catch((error) => console.log(error));
+    if (!document) {
+        return {
+            character: null,
+            error: {
+                field: "database",
+                message: "Could not find program data. Try again later",
+            },
+        };
+    }
+    if (document.createdBy !== uid) {
+        return {
+            character: null,
+            error: {
+                field: "authorization",
+                message: "You are not authorized to perform this operation",
+            },
+        };
+    }
+    let character = yield Character_1.Character.findByIdAndUpdate(cid, {
+        name,
+        actor,
+        image,
+    }).catch((error) => console.log(error));
+    if (character) {
+        return {
+            character,
+            error: null,
+        };
+    }
+    else {
+        return {
+            character: null,
+            error: {
+                field: "database",
+                message: "Could not find program data. Try again later",
+            },
+        };
+    }
+});
+exports.updateCharacter = updateCharacter;
