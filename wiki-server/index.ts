@@ -17,6 +17,7 @@ import {
   createCharacter,
   getCharacters,
   updateCharacter,
+  deleteCharacter,
 } from "./handlers/character";
 
 dotenv.config();
@@ -246,6 +247,27 @@ mongoose
       });
       res.send({
         character,
+        error,
+      });
+      return next();
+    });
+
+    app.delete("/programs/:pid/:cid", async (req, res, next) => {
+      const { pid, cid } = req.params;
+      const uid = req.body.uid;
+      if (!auth(req)) {
+        res.send({
+          character: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        return next();
+      }
+      const { success, error } = await deleteCharacter(uid, cid);
+      res.send({
+        success,
         error,
       });
       return next();

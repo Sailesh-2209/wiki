@@ -143,3 +143,52 @@ export const updateCharacter: (arg0: {
     };
   }
 };
+
+export const deleteCharacter: (
+  uid: string,
+  cid: string
+) => Promise<{
+  success: boolean;
+  error: { field: string; message: string } | null;
+}> = async (uid, cid) => {
+  let document = await Character.findOne({ _id: cid }).catch((error) =>
+    console.log(error)
+  );
+  let error = null;
+  if (!document) {
+    return {
+      success: false,
+      error: {
+        field: "database",
+        message: "Could not find program data. Try again later",
+      },
+    };
+  }
+  if (document!.createdBy !== uid) {
+    return {
+      success: false,
+      error: {
+        field: "authorization",
+        message: "You are not authorized to perform this operation",
+      },
+    };
+  }
+  await Character.findByIdAndDelete(cid).catch((err) => {
+    error = err;
+    console.log(error);
+  });
+  if (error) {
+    return {
+      success: false,
+      error: {
+        field: "",
+        message: "",
+      },
+    };
+  } else {
+    return {
+      success: true,
+      error: null,
+    };
+  }
+};

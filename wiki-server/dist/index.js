@@ -234,6 +234,26 @@ mongoose_1.default
         });
         return next();
     }));
+    app.delete("/programs/:pid/:cid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const { pid, cid } = req.params;
+        const uid = req.body.uid;
+        if (!auth_1.auth(req)) {
+            res.send({
+                character: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
+            });
+            return next();
+        }
+        const { success, error } = yield character_1.deleteCharacter(uid, cid);
+        res.send({
+            success,
+            error,
+        });
+        return next();
+    }));
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });
