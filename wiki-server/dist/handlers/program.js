@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProgram = exports.getPrograms = exports.createProgram = void 0;
+exports.deleteProgram = exports.updateProgram = exports.getPrograms = exports.createProgram = void 0;
 const Program_1 = require("../models/Program");
 const createProgram = ({ createdBy, name, description, startedIn, endedIn, image, }) => __awaiter(void 0, void 0, void 0, function* () {
     if (!createdBy || !name || !description || !startedIn || !endedIn || !image) {
@@ -74,6 +74,48 @@ const getPrograms = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getPrograms = getPrograms;
+const updateProgram = ({ name, description, startedIn, endedIn, image, uid, pid }) => __awaiter(void 0, void 0, void 0, function* () {
+    let document = yield Program_1.Program.findById(pid).catch((error) => console.log(error));
+    if (!document) {
+        return {
+            program: null,
+            error: {
+                field: "database",
+                message: "Could not find program data. Try again later",
+            },
+        };
+    }
+    if (document.createdBy !== uid) {
+        return {
+            program: null,
+            error: {
+                field: "authorization",
+                message: "You are not authorized to perform this operation",
+            },
+        };
+    }
+    const program = yield Program_1.Program.findByIdAndUpdate(pid, {
+        name,
+        description,
+        startedIn,
+        endedIn,
+        image,
+    }).catch((error) => console.log(error));
+    if (program) {
+        return {
+            program,
+            error: null,
+        };
+    }
+    return {
+        program: null,
+        error: {
+            field: "database",
+            message: "Could not find program data. Try again later",
+        },
+    };
+});
+exports.updateProgram = updateProgram;
 const deleteProgram = (uid, pid) => __awaiter(void 0, void 0, void 0, function* () {
     let document = yield Program_1.Program.findOne({ _id: pid }).catch((error) => console.log(error));
     let error = null;

@@ -28,7 +28,12 @@ const PORT = process.env.PORT || 5000;
 const MONGOURL = process.env.MONGOURL;
 const app = express_1.default();
 mongoose_1.default
-    .connect(MONGOURL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(MONGOURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: true,
+    useCreateIndex: true,
+})
     .then(() => {
     app.use(body_parser_1.default.json());
     app.use(cors_1.default({
@@ -59,7 +64,6 @@ mongoose_1.default
     }));
     app.post("/checkauth", (req, res, next) => {
         const authorized = auth_1.auth(req);
-        console.log(req.headers);
         res.send({
             authorized,
         });
@@ -139,17 +143,35 @@ mongoose_1.default
         });
         return next();
     }));
+    app.post("/programs/:pid/edit", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!auth_1.auth(req)) {
+            res.send({
+                program: null,
+                error: {
+                    field: "authorization",
+                    message: "You are not authorized to perform this operation",
+                },
+            });
+            return next();
+        }
+        const pid = req.params.pid;
+        const { name, description, startedIn, endedIn, image, uid } = req.body;
+        const { program, error } = yield program_1.updateProgram({
+            name,
+            description,
+            startedIn,
+            endedIn,
+            image,
+            uid,
+            pid,
+        });
+        res.send({
+            program,
+            error,
+        });
+        return next();
+    }));
     app.get("/programs", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        // if (!auth(req)) {
-        //   res.send({
-        //     programs: null,
-        //     error: {
-        //       field: "authorization",
-        //       message: "You are not authorized to perform this operation",
-        //     },
-        //   });
-        //   return next();
-        // }
         const { programs, error } = yield program_1.getPrograms();
         res.send({
             programs,

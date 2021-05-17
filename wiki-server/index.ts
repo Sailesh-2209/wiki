@@ -7,7 +7,12 @@ import { User } from "./models/User";
 import { register } from "./handlers/register";
 import { login } from "./handlers/login";
 import { auth } from "./utils/auth";
-import { createProgram, getPrograms, deleteProgram } from "./handlers/program";
+import {
+  createProgram,
+  getPrograms,
+  updateProgram,
+  deleteProgram,
+} from "./handlers/program";
 import { createCharacter, getCharacters } from "./handlers/character";
 
 dotenv.config();
@@ -18,7 +23,12 @@ const MONGOURL = process.env.MONGOURL!;
 const app = express();
 
 mongoose
-  .connect(MONGOURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGOURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     app.use(bodyParser.json());
 
@@ -55,7 +65,6 @@ mongoose
 
     app.post("/checkauth", (req, res, next) => {
       const authorized = auth(req);
-      console.log(req.headers);
       res.send({
         authorized,
       });
@@ -142,17 +151,36 @@ mongoose
       return next();
     });
 
+    app.post("/programs/:pid/edit", async (req, res, next) => {
+      if (!auth(req)) {
+        res.send({
+          program: null,
+          error: {
+            field: "authorization",
+            message: "You are not authorized to perform this operation",
+          },
+        });
+        return next();
+      }
+      const pid = req.params.pid;
+      const { name, description, startedIn, endedIn, image, uid } = req.body;
+      const { program, error } = await updateProgram({
+        name,
+        description,
+        startedIn,
+        endedIn,
+        image,
+        uid,
+        pid,
+      });
+      res.send({
+        program,
+        error,
+      });
+      return next();
+    });
+
     app.get("/programs", async (req, res, next) => {
-      // if (!auth(req)) {
-      //   res.send({
-      //     programs: null,
-      //     error: {
-      //       field: "authorization",
-      //       message: "You are not authorized to perform this operation",
-      //     },
-      //   });
-      //   return next();
-      // }
       const { programs, error } = await getPrograms();
       res.send({
         programs,
