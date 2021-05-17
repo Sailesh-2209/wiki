@@ -8,8 +8,24 @@ import { baseURL } from "../../constants/baseURL";
 import styles from "../../styles/Character.module.css";
 import { AuthContext } from "../../constants/authContext";
 import { Character } from "../../components/Character";
+import CharacterModals from "../../components/CharacterModals";
 
 const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    height: "150px",
+    width: "300px",
+    backgroundColor: "#efefef",
+    border: "1px solid black",
+    borderRadius: "5px",
+  },
+};
+const customStyles2 = {
   content: {
     top: "50%",
     left: "50%",
@@ -88,6 +104,7 @@ export default function ProgramPage({ characters, programs }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [programDeleteError, setProgramDeleteError] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleConfirmModalOpen = () => {
     setIsConfirmModalOpen(true);
@@ -120,6 +137,11 @@ export default function ProgramPage({ characters, programs }) {
     setProgramDeleteError(null);
   };
 
+  const handleEditModal = () => {
+    console.log("edit");
+    setIsEditModalOpen(true);
+  };
+
   useEffect(async () => {
     let uid;
     let token;
@@ -144,45 +166,18 @@ export default function ProgramPage({ characters, programs }) {
 
   return (
     <>
-      <Modal style={customStyles} isOpen={isConfirmModalOpen}>
-        <div className={styles.confirmModalContainer}>
-          <div className={styles.modalHeading}>
-            Do you want to delete this show?
-          </div>
-          {isDeleting ? (
-            <ClipLoader />
-          ) : programDeleteError ? (
-            <>
-              <div className={styles.modalError}>
-                &#9432; {programDeleteError.message}
-              </div>
-              <div className={styles.modalBtnContainer}>
-                <button
-                  className={styles.programDelBtn}
-                  onClick={() => handleOnDeleteError()}
-                >
-                  OK
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className={styles.modalBtnContainer}>
-              <button
-                className={styles.programDelBtn}
-                onClick={() => handleDeleteProgram()}
-              >
-                YES
-              </button>
-              <button
-                className={styles.programUpdBtn}
-                onClick={() => setIsConfirmModalOpen(false)}
-              >
-                NO
-              </button>
-            </div>
-          )}
-        </div>
-      </Modal>
+      <CharacterModals
+        customStyles={customStyles}
+        customStyles2={customStyles2}
+        isConfirmModalOpen={isConfirmModalOpen}
+        isEditModalOpen={isEditModalOpen}
+        isDeleting={isDeleting}
+        programDeleteError={programDeleteError}
+        handleOnDeleteError={handleOnDeleteError}
+        handleDeleteProgram={handleDeleteProgram}
+        setIsConfirmModalOpen={setIsConfirmModalOpen}
+        setIsEditModalOpen={setIsEditModalOpen}
+      />
       <div className={styles.charactersPage}>
         <div className={styles.navbar}>
           <div className={styles.navbarContent}>
@@ -223,7 +218,12 @@ export default function ProgramPage({ characters, programs }) {
                   >
                     DELETE
                   </button>
-                  <button className={styles.programUpdBtn}>EDIT</button>
+                  <button
+                    className={styles.programUpdBtn}
+                    onClick={() => handleEditModal()}
+                  >
+                    EDIT
+                  </button>
                 </>
               ) : null}
             </div>
