@@ -39,7 +39,7 @@ mongoose
 
     app.use(
       cors({
-        origin: "http://localhost:3000",
+        origin: "https://wiki-omega.vercel.app",
         credentials: true,
       })
     );

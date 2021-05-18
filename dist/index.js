@@ -37,7 +37,7 @@ mongoose_1.default
     .then(() => {
     app.use(body_parser_1.default.json());
     app.use(cors_1.default({
-        origin: "http://localhost:3000",
+        origin: "https://wiki-omega.vercel.app",
         credentials: true,
     }));
     app.post("/register", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
