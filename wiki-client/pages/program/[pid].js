@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Modal from "react-modal";
-import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
 import { baseURL } from "../../constants/baseURL";
 import styles from "../../styles/Character.module.css";
@@ -87,6 +85,7 @@ export const getStaticProps = async (context) => {
           error: null,
         },
       },
+      revalidate: 1,
     };
   }
 };

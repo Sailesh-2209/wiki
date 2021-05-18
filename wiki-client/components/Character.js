@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../styles/Character.module.css";
 import EditCharacterModal from "./EditCharacterModal";
 import DeleteCharacterModal from "./DeleteCharacterModal";
