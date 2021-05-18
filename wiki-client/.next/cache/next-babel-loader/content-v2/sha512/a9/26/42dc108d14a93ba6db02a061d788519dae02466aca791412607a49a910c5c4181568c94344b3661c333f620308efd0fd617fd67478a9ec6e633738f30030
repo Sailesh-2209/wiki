@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const baseURL = \"https://wiki-server.herokuapp.com\";","map":{"version":3,"sources":["C:/Users/saile/Desktop/Sailesh/React/Wiki/wiki-client/constants/baseURL.js"],"names":["baseURL"],"mappings":"AAAA,OAAO,MAAMA,OAAO,GAAG,mCAAhB","sourcesContent":["export const baseURL = \"https://wiki-server.herokuapp.com\";\r\n"]},"metadata":{},"sourceType":"module"}
