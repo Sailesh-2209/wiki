@@ -6,6 +6,7 @@ import { baseURL } from "../../constants/baseURL";
 import styles from "../../styles/Character.module.css";
 import { AuthContext } from "../../constants/authContext";
 import { Character } from "../../components/Character";
+import ClipLoader from "react-spinners/ClipLoader";
 import CharacterModals from "../../components/CharacterModals";
 import CreateCharacterModal from "../../components/CreateCharacterModal";
 
@@ -172,6 +173,10 @@ export default function ProgramPage({ characters, programs }) {
       setIsProgramOwner(false);
     }
   });
+
+  if (router.isFallback) {
+    return <ClipLoader />;
+  }
 
   return (
     <>
