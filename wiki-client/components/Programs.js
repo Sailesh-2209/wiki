@@ -13,7 +13,7 @@ export function Programs({ programs, loggedIn, setPrograms }) {
   };
 
   const handleRoute = (pid) => {
-    router.push(`program/${pid}`);
+    router.push("program/[pid]", `program/${pid}`);
   };
 
   return (
