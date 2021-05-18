@@ -39,7 +39,7 @@ mongoose
 
     app.use(
       cors({
-        origin: "https://wiki-omega.vercel.app/",
+        origin: "https://wiki-omega.vercel.app",
         credentials: true,
         methods: "GET, PUT, POST, DELETE",
         allowedHeaders: "Content-Type, Authorization, Accept, Accept-Language, Content-Language"

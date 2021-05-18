@@ -37,7 +37,7 @@ mongoose_1.default
     .then(() => {
     app.use(body_parser_1.default.json());
     app.use(cors_1.default({
-        origin: "https://wiki-omega.vercel.app/",
+        origin: "https://wiki-omega.vercel.app",
         credentials: true,
         methods: "GET, PUT, POST, DELETE",
         allowedHeaders: "Content-Type, Authorization, Accept, Accept-Language, Content-Language"
