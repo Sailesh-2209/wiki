@@ -41,6 +41,8 @@ mongoose
       cors({
         origin: "https://wiki-omega.vercel.app",
         credentials: true,
+        methods: "GET, PUT, POST, DELETE",
+        allowedHeaders: "Content-Type, Authorization"
       })
     );
 
