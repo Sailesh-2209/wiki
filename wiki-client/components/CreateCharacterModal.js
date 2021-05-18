@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import modalStyles from "../styles/Modal.module.css";
@@ -33,6 +33,7 @@ export default function CreateCharacterModal(props) {
   const [image, setImage] = useState("");
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
+  const router = useRouter();
 
   const handleCreateCharacter = () => {
     setSaving(true);
@@ -58,7 +59,7 @@ export default function CreateCharacterModal(props) {
         } else {
           setIsCreateCharacterModalOpen(false);
           setSaving(false);
-          Router.reload();
+          router.reload();
         }
       })
       .catch((error) => console.log(error));

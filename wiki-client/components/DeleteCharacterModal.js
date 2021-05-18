@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Modal from "react-modal";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
@@ -26,6 +26,7 @@ export default function DeleteCharacterModal(props) {
   const { isOpen, setIsOpen, cid, pid, token, uid } = props;
   const [isDeleting, setIsDeleting] = useState(false);
   const [programDeleteError, setProgramDeleteError] = useState(null);
+  const router = useRouter();
 
   const handleCloseModal = () => {
     setIsOpen(false);
@@ -47,7 +48,7 @@ export default function DeleteCharacterModal(props) {
         if (value.data.success) {
           setIsDeleting(false);
           setIsOpen(false);
-          Router.reload();
+          router.reload();
         } else {
           setIsDeleting(false);
           setProgramDeleteError(value.data.error);

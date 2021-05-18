@@ -1,5 +1,5 @@
 import React from "react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Modal from "react-modal";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
@@ -37,6 +37,7 @@ export default function CharacterModals(props) {
     stateToken,
     pid,
   } = props;
+  const router = useRouter();
 
   const handleEditProgram = () => {
     setSaving(true);
@@ -65,7 +66,7 @@ export default function CharacterModals(props) {
           setIsEditModalOpen(false);
           setNewError(null);
           setSaving(false);
-          Router.reload();
+          router.reload();
         }
       })
       .catch((error) => console.log(error));

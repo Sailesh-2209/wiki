@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import ClipLoader from "react-spinners/ClipLoader";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { baseURL } from "../constants/baseURL";
 import modalStyles from "../styles/Modal.module.css";
@@ -38,6 +38,7 @@ export default function EditCharacterModal(props) {
   } = props;
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const handleEditSave = () => {
     setSaving(true);
@@ -65,12 +66,14 @@ export default function EditCharacterModal(props) {
         } else {
           setSaving(false);
           setIsOpen(false);
-          Router.reload();
+          router.reload();
+          router.push("program/[pid]", `program/${pid}`);
         }
         console.log(value);
       })
       .catch((error) => {
-        Router.reload();
+        router.reload();
+        router.push("program/[pid]", `program/${pid}`);
         console.log(error);
       });
   };
