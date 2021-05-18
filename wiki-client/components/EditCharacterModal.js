@@ -67,13 +67,13 @@ export default function EditCharacterModal(props) {
           setSaving(false);
           setIsOpen(false);
           router.reload();
-          router.push("program/[pid]", `program/${pid}`);
+          router.push("[pid]", `${pid}`);
         }
         console.log(value);
       })
       .catch((error) => {
         router.reload();
-        router.push("program/[pid]", `program/${pid}`);
+        router.push("[pid]", `${pid}`);
         console.log(error);
       });
   };
